@@ -27,8 +27,6 @@ public class PlayerShoot : MonoBehaviour {
         gameManager = GameObject.Find("Level").GetComponent<GameManager>();
         lineRenderer = transform.GetComponent<LineRenderer>();
         layerMask = LayerMask.GetMask(new string[] {"Wall" , "Stage"});
-        
-        
     }
 
     void Start () {
@@ -94,8 +92,9 @@ public class PlayerShoot : MonoBehaviour {
         beamPoints[1] = hit.point;
 
         //Draw beam line
-        for (int i = 0; i < beamPoints.Length; i++)
-            lineRenderer.SetPosition(i, beamPoints[i]);
+		for (int i = 0; i < beamPoints.Length; i++) {
+			lineRenderer.SetPosition (i, beamPoints [i]);
+		}
     }
 
 	void Shoot(Vector3 targetPosition)
@@ -108,7 +107,13 @@ public class PlayerShoot : MonoBehaviour {
 			return;
 		}
 
-		GameObject bullet = Instantiate (bulletPrefab, transform.position, Quaternion.identity);
+		// TODO: check this little hack!
+		Vector3 forwardPosition = (targetPosition - transform.position).normalized;
+
+		Vector3 bulletPosition = transform.position;
+		bulletPosition.y = 1.0f;
+
+		GameObject bullet = Instantiate (bulletPrefab, bulletPosition + forwardPosition * 1.1f, Quaternion.identity);
 
 		Bullet bulletScript = bullet.GetComponent<Bullet> ();
 

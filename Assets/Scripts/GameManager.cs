@@ -16,11 +16,13 @@ public class GameManager : MonoBehaviour {
 	private LevelManager levelManager;
     private TextManager textManager;
 	private Fortress[] fortressScripts;
+	private MusicManager musicManager;
 
     private void Awake()
     {
 		levelManager = GameObject.FindObjectOfType<LevelManager> () as LevelManager;
         textManager = GameObject.Find("Text").GetComponent<TextManager>();
+		musicManager = GameObject.FindObjectOfType<MusicManager> ();
     }
 
     void Start () {
@@ -29,6 +31,8 @@ public class GameManager : MonoBehaviour {
 		levelManager.LoadNextLevel ();
 
         fortressScripts = GameObject.FindObjectsOfType<Fortress> () as Fortress[];
+
+		musicManager.PlayRandomMusic ();
 	}
 
 	void Update () {

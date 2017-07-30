@@ -16,9 +16,10 @@ public class PlayerHealth : MonoBehaviour {
 	private PlayerBatteryManager playerBatteryManager;
 	private PlayerMovement playerMovementScript;
 	private AudioSource audioSource;
+    private Animator animator;
 
-	#region - Public methods
-	public void ApplyDamage(int damage, Vector3 damageDirection)
+    #region - Public methods
+    public void ApplyDamage(int damage, Vector3 damageDirection)
 	{
 		currentHealth -= damage;
 
@@ -38,7 +39,8 @@ public class PlayerHealth : MonoBehaviour {
 		currentHealth = maxHealth;
 		playerBatteryManager = gameObject.GetComponent<PlayerBatteryManager> ();
 		playerMovementScript = gameObject.GetComponent<PlayerMovement> ();
-	}
+        animator = transform.Find("Sprite").GetComponent<Animator>();
+    }
 
 	void Start () {
 		audioSource = GetComponent<AudioSource>();
@@ -68,7 +70,8 @@ public class PlayerHealth : MonoBehaviour {
 		isKnockedOut = true;
 		playerMovementScript.StopPlayer ();
 		audioSource.PlayOneShot (knockedOutSound);
-		if (playerBatteryManager.HasBattery ()) {
+        animator.SetInteger("State", (int)PlayerState.Stun);
+        if (playerBatteryManager.HasBattery ()) {
 			playerBatteryManager.DropBatteryAfterKnockOut (lastDamageDirection);
 		}
 	}
@@ -77,6 +80,7 @@ public class PlayerHealth : MonoBehaviour {
 		isKnockedOut = false;
 		currentHealth = maxHealth;
 		audioSource.PlayOneShot (recoverSound);
-	}
+        animator.SetInteger("State", (int)PlayerState.Idle);
+    }
 	#endregion // Private methods
 }

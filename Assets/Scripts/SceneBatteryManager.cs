@@ -40,7 +40,7 @@ public class SceneBatteryManager : MonoBehaviour {
 
 	public void DropBatteryAfterKnockout(GameObject player, Vector3 directionOfDrop, PlayerMovement playerMovementScript) {
 		Vector3 dropPosition = playerMovementScript.GetPositionToDropFromDirection (directionOfDrop);
-		DropBatteryFromPlayer (player, dropPosition, directionOfDrop * 3000.0f);
+		DropBatteryFromPlayer (player, dropPosition, directionOfDrop * 1000.0f);
 	}
 
 	private void DropBatteryFromPlayer(GameObject player, Vector3 position, Vector3 forceToDropBattery) {

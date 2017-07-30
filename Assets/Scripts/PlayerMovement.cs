@@ -11,6 +11,7 @@ public enum PlayerState {
 public class PlayerMovement : MonoBehaviour {
 
     public float movementSpeed = 5f;
+	public float movementSpeedWithBattery = 3f;
 
     private GameConfig.PlayerConfig playerConfig;
     private Rigidbody refRigidbody;
@@ -18,18 +19,19 @@ public class PlayerMovement : MonoBehaviour {
     private float axisMargin = 0.2f;
 	private GameManager gameManager;
 
-
 	private PlayerHealth playerHealthScript;
+	private PlayerBatteryManager playerBatteryManager;
 	private Vector3 lastMovementDirection = Vector3.zero;
 
     void Awake () {
 		gameManager = GameObject.Find("Level").GetComponent<GameManager>();
         this.refRigidbody = this.GetComponent<Rigidbody>();
-        this.refAnimator = this.GetComponent<Animator>();
+        this.refAnimator = transform.Find("Sprite").GetComponent<Animator>();
     }
 
 	void Start () {
 		playerHealthScript = gameObject.GetComponent<PlayerHealth> ();
+		playerBatteryManager = gameObject.GetComponent<PlayerBatteryManager> ();
         playerConfig = GameConfig.Instance.GetPlayerConfig(this.tag);
         this.refAnimator.SetBool("IsRed", (this.tag == "Red"));
     }
@@ -49,7 +51,11 @@ public class PlayerMovement : MonoBehaviour {
 			lastMovementDirection = movementDirection;
 		}
 
-        this.refRigidbody.velocity = movementDirection.normalized * this.movementSpeed;
+		float speed = this.movementSpeed;
+		if (playerBatteryManager.HasBattery ()) {
+			speed = this.movementSpeedWithBattery;	
+		}
+		this.refRigidbody.velocity = movementDirection.normalized * speed;
 
         //Idle and Run animations
         if (this.refRigidbody.velocity.magnitude > 0f)

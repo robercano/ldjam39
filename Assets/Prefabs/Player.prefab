@@ -87,7 +87,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -182,7 +182,7 @@ Animator:
   m_GameObject: {fileID: 1734243644631768}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 2d98acee3148358439911e83ead4147d, type: 2}
+  m_Controller: {fileID: 9100000, guid: 92730269dd86f4899af8a4d9db429cc7, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -202,7 +202,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 10
-  movementSpeedWithBattery: 7
+  movementSpeedWithBattery: 5
 --- !u!114 &114166534095751824
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -342,7 +342,7 @@ CapsuleCollider:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1110458615083286}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: d3f915093caf44d45a29268840686d6b, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5

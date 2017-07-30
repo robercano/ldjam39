@@ -1,12 +1,15 @@
 fileFormatVersion: 2
 guid: c44d301c27400c340852906c5ea71e43
-timeCreated: 1501426921
+timeCreated: 1501436927
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: BluePlayer
-    21300002: RedPlayer
+    21300000: BluePlayer_Idle1
+    21300002: RedPlayer_Idle1
     21300004: Bullet
+    21300006: BluePlayer_Stun1
+    21300008: RedPlayer_Stun1
+    21300010: Battery
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -81,26 +84,26 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: BluePlayer
+      name: BluePlayer_Idle1
       rect:
         serializedVersion: 2
         x: 0
-        y: 784
-        width: 64
-        height: 64
+        y: 703
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: RedPlayer
+      name: RedPlayer_Idle1
       rect:
         serializedVersion: 2
         x: 0
-        y: 720
-        width: 64
-        height: 64
+        y: 575
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -110,10 +113,49 @@ TextureImporter:
       name: Bullet
       rect:
         serializedVersion: 2
-        x: 0
-        y: 656
+        x: 316
+        y: 784
         width: 64
         height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: BluePlayer_Stun1
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 703
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: RedPlayer_Stun1
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 575
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Battery
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 447
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

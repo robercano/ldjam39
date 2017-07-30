@@ -55,7 +55,7 @@ public class Bullet : MonoBehaviour {
 
 		// TODO: player.GetComponent() can be moved to GameManager so the component is already fetched
 		PlayerHealth playerHealthScript = player.GetComponent ("PlayerHealth") as PlayerHealth;
-		playerHealthScript.ApplyDamage (damage, player.transform.position - gameObject.transform.position);
+		playerHealthScript.ApplyDamage (damage, rigidBody.velocity);
 		Destroy (gameObject);
 	}
 	#endregion // Private methods

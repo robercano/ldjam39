@@ -66,6 +66,10 @@ public class Fortress : MonoBehaviour {
 		UpdateEnergyBar ();
 	}
 
+	public float GetPercentage() {
+		return (float)currentEnergy / (float)maxEnergy;
+	}
+
 	void UpdateEnergyDecay()
 	{
 		if (currentEnergy <= 0) {
@@ -79,7 +83,7 @@ public class Fortress : MonoBehaviour {
 			lastDecayTime = currentTime;
 
 			currentEnergy -= energyDecayAmount;
-			if (currentEnergy < 5) {
+			if (GetPercentage() < 0.2f) {
 				audioSource.PlayOneShot (lowBatterySound);
 			}
 			if (currentEnergy < 0) {
