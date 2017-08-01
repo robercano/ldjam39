@@ -13,7 +13,7 @@ public enum GameState
 public class GameManager : MonoBehaviour {
 
     public GameState gameState;
-	private LevelManager levelManager;
+    private LevelManager levelManager;
     private TextManager textManager;
 	private Fortress[] fortressScripts;
 	private MusicManager musicManager;
@@ -26,18 +26,21 @@ public class GameManager : MonoBehaviour {
     }
 
     void Start () {
-        Cursor.visible = false;
+		Cursor.visible = false;
 
-		levelManager.LoadNextLevel ();
+		levelManager.LoadNextLevel();
+		levelManager.BakeNavMesh();
+		levelManager.SpawnPlayers ();
 
-        fortressScripts = GameObject.FindObjectsOfType<Fortress> () as Fortress[];
+		fortressScripts = GameObject.FindObjectsOfType<Fortress> () as Fortress[];
 
-		musicManager.PlayRandomMusic ();
+		musicManager.PlayLevelMusic (levelManager.GetCurrentLevel());
 	}
 
 	void Update () {
 		UpdateAlivePlayers ();
 		CheckVictoryCondition ();
+		CheckExit ();
 	}
 
 	void UpdateAlivePlayers()
@@ -47,8 +50,6 @@ public class GameManager : MonoBehaviour {
 
 		foreach (Fortress fortress in fortressScripts) {
 			if (fortress.CurrentEnergy == 0) {
-				Debug.Log ("Fortress " + fortress.gameObject.tag + "has lost!!!");
-
 				deadFortresses.Add (fortress);
 			} else {
 				aliveFortresses.Add (fortress);
@@ -63,12 +64,22 @@ public class GameManager : MonoBehaviour {
 	void CheckVictoryCondition()
 	{
         if (gameState == GameState.EndGame){
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+			if (levelManager.GetCurrentLevel () == LevelManager.MaxLevels) {
+				SceneManager.LoadScene("Credits");
+			} else {
+				SceneManager.LoadScene (SceneManager.GetActiveScene ().buildIndex);
+			}
         } else if (fortressScripts.Length == 0) {
             textManager.End("DRAW!");
         } else if (fortressScripts.Length == 1) {
             textManager.End(fortressScripts[0].gameObject.tag.ToUpper() + " WINS!");
 		}
     }
+
+	void CheckExit() {
+		if (Input.GetKey(KeyCode.Escape)) {
+			SceneManager.LoadScene("MainMenu");
+		}
+	}
 
 }

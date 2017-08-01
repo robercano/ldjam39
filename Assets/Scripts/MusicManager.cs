@@ -17,6 +17,18 @@ public class MusicManager : MonoBehaviour {
 		audioSource.Play();
 	}
 
+	public void PlayLevelMusic(int level)
+	{
+		if (level >= audioClips.Length) {
+			PlayRandomMusic ();
+			return;
+		}
+
+		audioSource.clip = audioClips[level];
+
+		audioSource.Play();
+	}
+
 	void Awake () {
 		audioSource = GetComponent<AudioSource> ();
 	}

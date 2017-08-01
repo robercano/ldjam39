@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: e66578a7cdcd74e63a2f662104eb9efe
+timeCreated: 1501450953
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 300
+  forceTextureCase: 0
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Mutant Academy DC BB
+  fontNames:
+  - Mutant Academy DC BB
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

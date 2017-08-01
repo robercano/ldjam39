@@ -9,31 +9,85 @@ public class GameConfig : Singleton<GameConfig>{
 	{
         public string playerNumber;
 		public Color crosshairColor;
-        public ControllerType controllerType;
+		public ControllerType unityControllerType;
+		public ControlType controlType;
+	}
+
+	public enum Team
+	{
+		Red,
+		Blue
+	}
+
+	public enum ControlType
+	{
+		Keyboard,
+		Controller,
+		AI
+	}
+
+	public void SetPlayerController(Team team, ControlType type)
+	{
+		PlayerConfig newConfig = playerConfig [team];
+
+		newConfig.controlType = type;
+
+		switch (type) {
+		case ControlType.Keyboard:
+			newConfig.unityControllerType = ControllerType.KeyboardMouse;
+			break;
+		case ControlType.Controller:
+			newConfig.unityControllerType = ControllerType.xBox360Windows;
+			break;
+		case ControlType.AI:
+			newConfig.unityControllerType = ControllerType.None;
+			break;
+		}
+	
+		playerConfig [team] = newConfig;
 	}
 
     GameConfig()
 	{
-		bluePlayerConfig = new PlayerConfig ();
-        bluePlayerConfig.playerNumber = "1";
-        bluePlayerConfig.crosshairColor = Color.blue;
-		bluePlayerConfig.controllerType = ControllerType.KeyboardMouse;
+		playerConfig = new Dictionary<Team, PlayerConfig> ();
 
-        redPlayerConfig = new PlayerConfig ();
-        redPlayerConfig.playerNumber = "2";
-        redPlayerConfig.crosshairColor = Color.red;
-        redPlayerConfig.controllerType = ControllerType.xBox360Windows;
+		PlayerConfig bluePlayerConfig;
+
+		bluePlayerConfig = new PlayerConfig ();
+        bluePlayerConfig.playerNumber = "2";
+        bluePlayerConfig.crosshairColor = Color.blue;
+		bluePlayerConfig.unityControllerType = ControllerType.KeyboardMouse;
+		bluePlayerConfig.controlType = ControlType.Keyboard;
+
+		playerConfig [Team.Blue] = bluePlayerConfig;
+
+
+		PlayerConfig redPlayerConfig;
+
+		redPlayerConfig = new PlayerConfig ();
+		redPlayerConfig.playerNumber = "1";
+		redPlayerConfig.crosshairColor = Color.red;
+		redPlayerConfig.unityControllerType = ControllerType.None;
+		redPlayerConfig.controlType = ControlType.AI;
+
+		playerConfig [Team.Red] = redPlayerConfig;
     }
 
+	public PlayerConfig GetPlayerConfig(Team team)
+	{
+		return playerConfig [team];
+	}
 	public PlayerConfig GetPlayerConfig(string team)
 	{
 		if (team == "Red") {
-			return redPlayerConfig;
+			return playerConfig [Team.Red];
 		} else {
-			return bluePlayerConfig;
+			return playerConfig [Team.Blue];
 		}
 	}
 
 	private PlayerConfig bluePlayerConfig;
 	private PlayerConfig redPlayerConfig;
+
+	private Dictionary<Team, PlayerConfig> playerConfig;
 }

@@ -53,6 +53,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: FloorLevel
+    uniqueID: 2298717957
+    locked: 0
+  - name: WallLevel
+    uniqueID: 874659743
+    locked: 0
   - name: UI
     uniqueID: 2996928729
     locked: 0

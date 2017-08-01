@@ -2,16 +2,22 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using UnityEngine.AI;
+using com.kleberswf.lib.core;
 
-public class LevelManager : MonoBehaviour {
+public class LevelManager : Singleton<LevelManager> {
 	public GameObject RedPlayerPrefab;
 	public GameObject BluePlayerPrefab;
 	public GameObject RedBasePrefab;
 	public GameObject BlueBasePrefab;
-	private string RedPlayerGameTag = "Red";
+
+    private NavMeshSurface refNavMeshSurface;
+    private string RedPlayerGameTag = "Red";
 	private string BluePlayerGameTag = "Blue";
 	private string RedPlayerName = "RedPlayer";
 	private string BluePlayerName = "BluePlayer";
+	private string RedBaseName = "RedBase";
+	private string BlueBaseName = "BlueBase";
 
 	private int gameLevelWidthInTiles;
 	private int gameLevelHeightInTiles;
@@ -19,30 +25,98 @@ public class LevelManager : MonoBehaviour {
 	Dictionary<string, GameObject> tilesPrefabsMap;
 
 	string[] level1Config = {
-		"W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W",
-		"W   F   F   F   F   W   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   W",
-		"W   F   RB  F   F   W   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   W",
-		"W   F   F   F   F   W   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   W",
-		"W   F   F   F   F   W   F   F   F   F   F   F   F   F   F   F   F   W   F   F   F   W   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   W",
-		"W   F   F   F   F   W   F   F   F   F   F   F   F   F   F   F   F   W   F   B   F   W   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   W",
-		"W   F   F   F   F   W   F   F   F   F   F   F   F   F   F   F   F   W   F   F   F   W   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   W",
-		"W   F   F   F   F   W   F   F   F   F   F   F   F   F   F   F   F   W   F   F   F   W   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   W",
-		"W   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   W   F   F   F   W   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   W",
-		"W   F   RP  F   F   F   F   F   F   F   F   F   F   F   F   F   F   W   F   F   F   W   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   W",
-		"W   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   W   F   B   F   W   F   F   F   F   F   F   F   F   F   F   F   F   F   F   BP  F   W",
-		"W   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   W   F   F   F   W   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   W",
-		"W   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   W   F   F   F   W   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   W",
-		"W   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   W   F   F   F   W   F   F   F   F   F   F   F   F   F   F   F   W   F   F   F   F   W",
-		"W   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   W   F   F   F   W   F   F   F   F   F   F   F   F   F   F   F   W   F   F   F   F   W",
-		"W   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   W   F   B   F   W   F   F   F   F   F   F   F   F   F   F   F   W   F   F   F   F   W",
-		"W   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   W   F   F   F   W   F   F   F   F   F   F   F   F   F   F   F   W   F   F   F   F   W",
-		"W   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   W   F   BB  F   F   W",
-		"W   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   W   F   F   F   F   W",
-		"W   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   F   W   F   F   F   F   W",
-		"W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W"
+        "W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W",
+        "W 0 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+        "W 0 A 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+        "W 0 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+        "W 0 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+        "W 0 0 0 0 W 0 0 0 0 0 0 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+        "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+        "W 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 W",
+        "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+        "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+        "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 0 W",
+        "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 0 0 0 0 0 0 W 0 0 0 0 W",
+        "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W 0 B 0 0 W",
+        "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 0 W",
+        "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 0 W",
+        "W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W"
+    };
+	string[] level2Config = {
+		"W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W",
+		"W 0 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+		"W 0 A 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+		"W 0 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+		"W 0 0 0 0 W 0 0 0 0 0 0 0 W 0 3 0 W 0 0 0 0 0 0 0 0 0 0 0 0 W",
+		"W 0 0 0 0 W 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 W",
+		"W 0 1 0 0 0 0 0 0 0 0 0 0 W 0 3 0 W 0 0 0 0 0 0 0 0 0 0 2 0 W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 3 0 W 0 0 0 0 0 0 0 W 0 0 0 0 W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 W 0 0 0 0 W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W 0 B 0 0 W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 0 W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 0 W",
+		"W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W"
+	};
+	string[] level3Config = {
+		"W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+		"W 0 A 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 3 0 W 0 0 0 0 0 0 0 0 0 0 0 0 W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 W",
+		"W 0 1 0 0 0 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 0 0 0 2 0 W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 3 0 W 0 0 0 0 0 0 0 0 0 0 0 0 W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 B 0 0 W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+		"W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W"
+	};
+	string[] level4Config = {
+		"W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W",
+		"W 0 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+		"W 0 A 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+		"W 0 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+		"W 0 0 0 0 W 0 0 0 0 0 0 0 W W W W W 0 0 0 0 0 0 0 0 0 0 0 0 W",
+		"W 0 0 0 0 W 0 0 0 0 0 0 0 W 0 3 0 W 0 0 0 0 0 0 0 0 0 0 0 0 W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 W",
+		"W 0 1 0 0 0 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 0 0 0 2 0 W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 W 0 0 0 0 W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 W 0 0 0 0 W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W 0 B 0 0 W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 0 W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 0 W",
+		"W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W"
+	};
+	string[] level5Config = {
+		"W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W",
+		"W 0 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+		"W 0 A 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 B 0 0 W",
+		"W 0 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+		"W 0 0 0 0 W 0 0 0 0 0 0 0 0 W W W 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+		"W 0 0 0 0 W 0 0 0 0 0 0 0 0 W 3 W 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+		"W 0 0 0 0 0 0 0 0 0 W W W W W 0 W W W W W 0 0 0 0 0 0 0 0 0 W",
+		"W 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+		"W 0 0 0 0 0 0 0 0 0 W W W W W W W W W W W 0 0 0 0 0 0 0 0 0 W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 0 W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 0 W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 0 W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 0 W",
+		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 0 W",
+		"W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W"
 	};
 
-	private int currentLevel = 0;
+	public static int MaxLevels = 5;
+	public static int CurrentLevel = 0;
 
 	public const float AboveFloorHeight = 0.5f;
 	public const float FloorHeight = -0.5f;
@@ -50,7 +124,7 @@ public class LevelManager : MonoBehaviour {
 	public const string ResourcesTilesFolder = "StageTiles";
 
     const string FloorTilePrefabName = "FloorTile";
-    const string FloorTileConfigTag = "F";
+    const string FloorTileConfigTag = "0";
 	public const string FloorTileGameTag = "Floor";
 
 	const string WallTilePrefabName = "WallTile";
@@ -58,23 +132,23 @@ public class LevelManager : MonoBehaviour {
 	public const string WallTileGameTag = "Wall";
 
 	const string BatterySpawnTilePrefabName = "BatterySpawnTile";
-	const string BatterySpawnTileConfigTag = "B";
+	const string BatterySpawnTileConfigTag = "3";
 	public const string BatterySpawnTileGameTag = "BatterySpawn";
 
 	const string RedPlayerSpawnTilePrefabName = "RedPlayerSpawnTile";
-	const string RedPlayerSpawnTileConfigTag = "RP";
+	const string RedPlayerSpawnTileConfigTag = "2";
 	public const string RedPlayerSpawnTileGameTag = "RedPlayerSpawn";
 
 	const string BluePlayerSpawnTilePrefabName = "BluePlayerSpawnTile";
-	const string BluePlayerSpawnTileConfigTag = "BP";
+	const string BluePlayerSpawnTileConfigTag = "1";
 	public const string BluePlayerSpawnTileGameTag = "BluePlayerSpawn";
 
 	const string RedBaseSpawnTilePrefabName = "RedBaseSpawnTile";
-	const string RedBaseSpawnTileConfigTag = "RB";
+	const string RedBaseSpawnTileConfigTag = "B";
 	public const string RedBaseSpawnTileGameTag = "RedBaseSpawn";
 
 	const string BlueBaseSpawnTilePrefabName = "BlueBaseSpawnTile";
-	const string BlueBaseSpawnTileConfigTag = "BB";
+	const string BlueBaseSpawnTileConfigTag = "A";
 	public const string BlueBaseSpawnTileGameTag = "BlueBaseSpawn";
 
 	const string TilesParent = "Tiles";
@@ -85,11 +159,25 @@ public class LevelManager : MonoBehaviour {
 	private Color[] floorTileColors;
 	private Color[] wallTileColors;
 
+	public int GetCurrentLevel()
+	{
+		return CurrentLevel;
+	}
+
 	public void LoadNextLevel()
 	{
-		currentLevel++;
+		CurrentLevel++;
 
-		LoadLevel(currentLevel);
+		LoadLevel(CurrentLevel);
+	}
+
+	public void SpawnPlayers()
+	{
+		SpawnPlayer (RedPlayerPrefab, RedPlayerName, RedPlayerGameTag, RedPlayerSpawnTileGameTag);
+		SpawnPlayer (BluePlayerPrefab, BluePlayerName, BluePlayerGameTag, BluePlayerSpawnTileGameTag);
+
+		SpawnBase (RedBasePrefab, RedBaseName, RedPlayerGameTag, RedBaseSpawnTileGameTag);
+		SpawnBase (BlueBasePrefab, BlueBaseName, BluePlayerGameTag, BlueBaseSpawnTileGameTag);
 	}
 
 	void Awake()
@@ -117,11 +205,11 @@ public class LevelManager : MonoBehaviour {
 
 		player.transform.position =	playerPosition;
 
-		player.gameObject.tag = playerTag;
-		player.gameObject.name = playerName;
+		player.tag = playerTag;
+		player.name = playerName;
 	}
 
-	void SpawnBase(GameObject basePrefab, string baseTag, string spawnTileGameTag)
+	void SpawnBase(GameObject basePrefab, string baseName, string baseTag, string spawnTileGameTag)
 	{
 		GameObject spawnTile = GameObject.FindGameObjectWithTag (spawnTileGameTag);
 
@@ -135,7 +223,8 @@ public class LevelManager : MonoBehaviour {
 
 		baseObject.transform.position =	basePosition;
 
-		baseObject.gameObject.tag = baseTag;
+		baseObject.tag = baseTag;
+		baseObject.name = baseName;
 	}
 
 	void LoadTilesMapInfo()
@@ -157,17 +246,17 @@ public class LevelManager : MonoBehaviour {
 	{
 		floorTileColors = new Color[4];
 
-		floorTileColors [0] = new Color (176/255.0f, 97/255.0f, 255/255.0f);
-		floorTileColors [1] = new Color (158/255.0f, 87/255.0f, 230/255.0f);
-		floorTileColors [2] = new Color (140/255.0f, 78/255.0f, 204/255.0f);
-		floorTileColors [3] = new Color (123/255.0f, 68/255.0f, 179/255.0f);
+		floorTileColors [0] = new Color (200/255.0f, 200/255.0f, 200/255.0f);
+		floorTileColors [1] = new Color (210/255.0f, 210/255.0f, 210/255.0f);
+		floorTileColors [2] = new Color (230/255.0f, 230/255.0f, 230/255.0f);
+		floorTileColors [3] = new Color (255/255.0f, 255/255.0f, 255/255.0f);
 
 		wallTileColors = new Color[4];
 
-		wallTileColors [0] = new Color (241/255.0f, 50/255.0f, 143/255.0f);
-		wallTileColors [1] = new Color (217/255.0f, 45/255.0f, 129/255.0f);
-		wallTileColors [2] = new Color (199/255.0f, 40/255.0f, 114/255.0f);
-		wallTileColors [3] = new Color (179/255.0f, 37/255.0f, 100/255.0f);
+		wallTileColors [0] = new Color (200/255.0f, 200/255.0f, 200/255.0f);
+		wallTileColors [1] = new Color (210/255.0f, 210/255.0f, 210/255.0f);
+		wallTileColors [2] = new Color (230/255.0f, 230/255.0f, 230/255.0f);
+		wallTileColors [3] = new Color (255/255.0f, 255/255.0f, 255/255.0f);
 	}
 
 	#endregion // Configuration setup methods
@@ -178,12 +267,6 @@ public class LevelManager : MonoBehaviour {
 
 		LoadLevelConfig (level, out levelConfig);
 		GenerateLevelFromConfig (levelConfig);
-
-		SpawnPlayer (RedPlayerPrefab, RedPlayerName, RedPlayerGameTag, RedPlayerSpawnTileGameTag);
-		SpawnPlayer (BluePlayerPrefab, BluePlayerName, BluePlayerGameTag, BluePlayerSpawnTileGameTag);
-
-		SpawnBase (RedBasePrefab, RedPlayerGameTag, RedBaseSpawnTileGameTag);
-		SpawnBase (BlueBasePrefab, BluePlayerGameTag, BlueBaseSpawnTileGameTag);
 	}
 
 	GameObject GetTilePrefabByConfigTag(string configTag)
@@ -193,12 +276,27 @@ public class LevelManager : MonoBehaviour {
 
 	void LoadLevelConfig(int level, out string[,] levelOutConfig)
 	{
-		if (level == 1) {
-			DoLoadLevelConfig (level1Config, out levelOutConfig);
-		} else {
-			// TODO: default level
-			DoLoadLevelConfig (level1Config, out levelOutConfig);
+		string[] levelConfig = null;
+
+		switch (level) {
+		case 1:
+			levelConfig = level1Config;
+			break;
+		case 2:
+			levelConfig = level2Config;
+			break;
+		case 3:
+			levelConfig = level3Config;
+			break;
+		case 4:
+			levelConfig = level4Config;
+			break;
+		case 5:
+			levelConfig = level5Config;
+			break;
 		}
+
+		DoLoadLevelConfig (levelConfig, out levelOutConfig);
 	}
 
 	void DoLoadLevelConfig(string[] levelInputConfig, out string[,] levelConfig)
@@ -229,14 +327,9 @@ public class LevelManager : MonoBehaviour {
 
 				GameObject tile = InstantiateTile (tileConfigTag, row, column);
 
-				ApplyBaseConfigToTile (tile, tileConfigTag);
+                ApplyBaseConfigToTile (tile, tileConfigTag);
 
 				RandomizeTileMaterialColor (tile, row, column);
-
-				if (IsWallTile (tile)) {
-					RandomizeTileHeight (tile, row, column);
-				}
-
 			}
 		}
 	}
@@ -250,8 +343,10 @@ public class LevelManager : MonoBehaviour {
 		ApplyTagToTile (tile, tileConfigTag);
 
 		tile.transform.position = new Vector3 (column - (gameLevelWidthInTiles - 1.0f)/2.0f, 0.0f, row - (gameLevelHeightInTiles - 1.0f)/2.0f);;
-	
-		return tile;
+
+        tile.transform.Find("Sprite").GetComponent<SpriteRenderer>().sortingOrder = (int)tile.transform.position.z * -100;
+
+        return tile;
 	}
 
 	void ApplyBaseConfigToTile(GameObject tile, string tileConfigTag)
@@ -407,12 +502,9 @@ public class LevelManager : MonoBehaviour {
 		} else if (randomChoice >= 0.45f) {
 			colorIndex = 3;
 		}
-		MeshRenderer meshRenderer = tile.GetComponent<MeshRenderer> ();
+		SpriteRenderer spriteRenderer = tile.GetComponentsInChildren<SpriteRenderer> () [0];
 
-		Material newMaterial = Instantiate (meshRenderer.material);
-		newMaterial.color = colorSelection[colorIndex];
-
-		meshRenderer.material = newMaterial;
+		spriteRenderer.color = colorSelection[colorIndex];
 	}
 
 	void RandomizeTileHeight (GameObject tile, int row, int column)
@@ -424,5 +516,12 @@ public class LevelManager : MonoBehaviour {
 		}
 		tile.transform.position = new Vector3 (tile.transform.position.x, tile.transform.position.y + heightVariation, tile.transform.position.z);
 	}
-	#endregion // Tile configuration
+    #endregion // Tile configuration
+
+    public void BakeNavMesh()
+    {
+        this.refNavMeshSurface = this.GetComponent<NavMeshSurface>();
+        this.refNavMeshSurface.agentTypeID = NavMesh.GetSettingsByIndex(0).agentTypeID;
+        this.refNavMeshSurface.BuildNavMesh();
+    }
 }

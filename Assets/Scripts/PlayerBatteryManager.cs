@@ -12,6 +12,7 @@ public class PlayerBatteryManager : MonoBehaviour {
 	private bool hasBattery;
 	private PlayerMovement playerMovementScript;
 	private SceneBatteryManager sceneBatteryManager;
+	private PlayerFistAttack playerFistAttackScript;
 	private AudioSource audioSource;
 
 	void Awake () {
@@ -24,7 +25,10 @@ public class PlayerBatteryManager : MonoBehaviour {
 	void Start () {
 		playerMovementScript = gameObject.GetComponent<PlayerMovement> ();
 		sceneBatteryManager = GameObject.Find("Level").GetComponent<SceneBatteryManager>();
+		playerFistAttackScript = GetComponent<PlayerFistAttack> ();
 		audioSource = GetComponent<AudioSource>();
+
+		playerFistAttackScript.SetCarryBatteryEnabled (false);
 	}
 
 	public bool HasBattery() {
@@ -35,12 +39,15 @@ public class PlayerBatteryManager : MonoBehaviour {
 		if (HasBattery ()) {
 			sceneBatteryManager.NotifyPlayerDroppedBattery (gameObject, playerMovementScript);
 			hasBattery = false;
+			playerFistAttackScript.SetCarryBatteryEnabled (false);
 			audioSource.PlayOneShot (dropBatterySound);
 		}
 	}
 
 	public void DropBatteryAfterKnockOut(Vector3 directionOfDrop) {
 		sceneBatteryManager.DropBatteryAfterKnockout (gameObject, directionOfDrop, playerMovementScript);
+		hasBattery = false;
+		playerFistAttackScript.SetCarryBatteryEnabled (false);
 		audioSource.PlayOneShot (dropBatterySound);
 	}
 
@@ -53,9 +60,10 @@ public class PlayerBatteryManager : MonoBehaviour {
 	}
 
 	private void HandleCollisionWithBattery(GameObject battery) {
-		if (!hasBattery) {
+		if (!hasBattery && !sceneBatteryManager.IsBatteryFromSomebody(battery)) {
 			Destroy(battery);
 			hasBattery = true;
+			playerFistAttackScript.SetCarryBatteryEnabled (true);
 			sceneBatteryManager.NotifyPlayerPickedBattery (gameObject, battery);
 			audioSource.PlayOneShot (pickBatterySound);
 		}
@@ -70,6 +78,7 @@ public class PlayerBatteryManager : MonoBehaviour {
 		}
 		if (sceneBatteryManager.NotifyPlayerUsedBattery (gameObject, fortress)) {
 			hasBattery = false;
+			playerFistAttackScript.SetCarryBatteryEnabled (false);
 		}
 	}
 }

@@ -46,9 +46,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\NavMeshComponents\Scripts\NavMeshLink.cs" />
+     <Compile Include="Assets\NavMeshComponents\Scripts\NavMeshModifier.cs" />
+     <Compile Include="Assets\NavMeshComponents\Scripts\NavMeshModifierVolume.cs" />
+     <Compile Include="Assets\NavMeshComponents\Scripts\NavMeshSurface.cs" />
+     <Compile Include="Assets\Scripts\AgentManager.cs" />
      <Compile Include="Assets\Scripts\Bullet.cs" />
+     <Compile Include="Assets\Scripts\CameraControl.cs" />
+     <Compile Include="Assets\Scripts\CameraManager.cs" />
+     <Compile Include="Assets\Scripts\CongratsScript.cs" />
+     <Compile Include="Assets\Scripts\ControllerSelection.cs" />
      <Compile Include="Assets\Scripts\Controllers.cs" />
      <Compile Include="Assets\Scripts\Crosshair.cs" />
+     <Compile Include="Assets\Scripts\Fist.cs" />
      <Compile Include="Assets\Scripts\Fortress.cs" />
      <Compile Include="Assets\Scripts\FortressEnergyDisplay.cs" />
      <Compile Include="Assets\Scripts\GameConfig.cs" />
@@ -56,11 +66,15 @@
      <Compile Include="Assets\Scripts\LevelManager.cs" />
      <Compile Include="Assets\Scripts\MusicManager.cs" />
      <Compile Include="Assets\Scripts\PlayerBatteryManager.cs" />
+     <Compile Include="Assets\Scripts\PlayerBulletShoot.cs" />
+     <Compile Include="Assets\Scripts\PlayerFistAttack.cs" />
      <Compile Include="Assets\Scripts\PlayerHealth.cs" />
      <Compile Include="Assets\Scripts\PlayerMovement.cs" />
-     <Compile Include="Assets\Scripts\PlayerShoot.cs" />
      <Compile Include="Assets\Scripts\SceneBatteryManager.cs" />
      <Compile Include="Assets\Scripts\TextManager.cs" />
+     <Compile Include="Assets\Scripts\UIGenericButtonController.cs" />
+     <Compile Include="Assets\Scripts\UIMainMenuController.cs" />
+     <Compile Include="Assets\Scripts\UISceneManager.cs" />
      <Compile Include="Assets\Scripts\Utils\PrefabAttribute.cs" />
      <Compile Include="Assets\Scripts\Utils\Singleton.cs.cs" />
  <Reference Include="UnityEngine.UI">

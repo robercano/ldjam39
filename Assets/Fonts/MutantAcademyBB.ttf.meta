@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: be743497e3d084df7a38ec830b9848ab
+timeCreated: 1501450953
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 300
+  forceTextureCase: 0
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Mutant Academy BB
+  fontNames:
+  - Mutant Academy BB
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

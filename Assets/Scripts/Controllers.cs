@@ -1,6 +1,7 @@
 ﻿public enum ControllerType
 {
-    KeyboardMouse,
+    None,
+	KeyboardMouse,
     xBox360Windows,
     xBox360Mac,
     xBox360Linux

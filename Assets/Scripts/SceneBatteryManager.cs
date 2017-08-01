@@ -11,11 +11,13 @@ public class SceneBatteryManager : MonoBehaviour {
 
 	private List<GameObject> currentBatteries;
 	private List<GameObject> playersWithBatteries;
+	private Dictionary<int, int> batteriesInPlayers;
 	private int stageLayerID;
 
 	void Awake () {
 		currentBatteries = new List<GameObject>();
 		playersWithBatteries = new List<GameObject>();
+		batteriesInPlayers = new Dictionary<int, int> ();
 		stageLayerID = LayerMask.NameToLayer ("Stage");
 	}
 
@@ -39,8 +41,13 @@ public class SceneBatteryManager : MonoBehaviour {
 	}
 
 	public void DropBatteryAfterKnockout(GameObject player, Vector3 directionOfDrop, PlayerMovement playerMovementScript) {
+		directionOfDrop = new Vector3 (directionOfDrop.x, 0, directionOfDrop.z);
 		Vector3 dropPosition = playerMovementScript.GetPositionToDropFromDirection (directionOfDrop);
-		DropBatteryFromPlayer (player, dropPosition, directionOfDrop * 1000.0f);
+		if (WillBatteryCollideWillWall (dropPosition, directionOfDrop)) {
+			directionOfDrop = -1.0f * directionOfDrop;
+			dropPosition = playerMovementScript.GetPositionToDropFromDirection (directionOfDrop);
+		}
+		DropBatteryFromPlayer (player, dropPosition, directionOfDrop.normalized * 1000.0f);
 	}
 
 	private void DropBatteryFromPlayer(GameObject player, Vector3 position, Vector3 forceToDropBattery) {
@@ -50,28 +57,39 @@ public class SceneBatteryManager : MonoBehaviour {
 
 		playersWithBatteries.Remove (player);
 		currentBatteries.Add (droppedBattery);
+		batteriesInPlayers.Remove (player.GetInstanceID ());
 	}
 
 	// It will check if putting it on front will throw it out of the level, id so, will put in the back
 	public Vector3 GetPositionToDropBattery(GameObject player, PlayerMovement playerMovementScript) {
-		float maxDistanceToThrowBoxesOut = 2f;
-		int layerMask = 1<< stageLayerID;
-		if (Physics.Raycast (player.transform.position, playerMovementScript.GetFrontDirection (), maxDistanceToThrowBoxesOut, layerMask)) {
+		
+		if (WillBatteryCollideWillWall(player.transform.position, playerMovementScript.GetFrontDirection ())) {
 			return playerMovementScript.GetPositionInBack ();
 		} else {
 			return playerMovementScript.GetPositionInFront ();
 		}
+	}
 
+	private bool WillBatteryCollideWillWall(Vector3 dropPosition, Vector3 direction) {
+		float maxDistanceToThrowBoxesOut = 2f;
+		int layerMask = 1<< stageLayerID;
+		return Physics.Raycast (dropPosition, direction, maxDistanceToThrowBoxesOut, layerMask);
 	}
 
 	public void NotifyPlayerPickedBattery(GameObject player, GameObject battery) {
 		playersWithBatteries.Add (player);
 		currentBatteries.Remove (battery);
+		batteriesInPlayers.Add (player.GetInstanceID (), battery.GetInstanceID ());
+	}
+
+	public bool IsBatteryFromSomebody(GameObject battery) {
+		return batteriesInPlayers.ContainsValue (battery.GetInstanceID ());
 	}
 
 	public bool NotifyPlayerUsedBattery(GameObject player, GameObject fortress) {
 		if (AddEnergyToFortress(energyPerBattery, fortress)) {
 			playersWithBatteries.Remove (player);
+			batteriesInPlayers.Remove (player.GetInstanceID ());
 			return true;
 		}
 		return false;
@@ -130,4 +148,18 @@ public class SceneBatteryManager : MonoBehaviour {
 			currentBatteries.Add (newBattery);
 		}
 	}
+
+    public GameObject ClosestBattery(Vector3 position) {
+        GameObject closestBattery = null;
+        float closestBatteryDistance = 10000f;
+        for (int i = 0; i < currentBatteries.Count; i++) {
+            float distance = Vector3.Distance(position, currentBatteries[i].transform.position);
+            if (distance < closestBatteryDistance){
+                closestBatteryDistance = distance;
+                closestBattery = currentBatteries[i];
+            }
+        }
+
+        return closestBattery;
+    }
 }

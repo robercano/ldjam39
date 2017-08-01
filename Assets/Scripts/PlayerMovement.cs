@@ -21,6 +21,7 @@ public class PlayerMovement : MonoBehaviour {
 
 	private PlayerHealth playerHealthScript;
 	private PlayerBatteryManager playerBatteryManager;
+	private PlayerFistAttack playerFistAttack;
 	private Vector3 lastMovementDirection = Vector3.zero;
 
     void Awake () {
@@ -33,7 +34,7 @@ public class PlayerMovement : MonoBehaviour {
 		playerHealthScript = gameObject.GetComponent<PlayerHealth> ();
 		playerBatteryManager = gameObject.GetComponent<PlayerBatteryManager> ();
         playerConfig = GameConfig.Instance.GetPlayerConfig(this.tag);
-        this.refAnimator.SetBool("IsRed", (this.tag == "Red"));
+		playerFistAttack = gameObject.GetComponent<PlayerFistAttack> ();
     }
 	
 	void Update () {
@@ -70,19 +71,19 @@ public class PlayerMovement : MonoBehaviour {
 
     public bool IsMoveRight()
     {
-        if (this.playerConfig.controllerType == ControllerType.KeyboardMouse)
+		if (this.playerConfig.unityControllerType == ControllerType.KeyboardMouse)
         {
             return (Input.GetKey(KeyCode.D));
         }
-        else if (this.playerConfig.controllerType == ControllerType.xBox360Windows)
+		else if (this.playerConfig.unityControllerType == ControllerType.xBox360Windows)
         {
             return (Input.GetAxis(Controllers.xBox360.Windows.MoveAxisX(this.playerConfig.playerNumber)) > this.axisMargin);
         }
-        else if (this.playerConfig.controllerType == ControllerType.xBox360Mac)
+		else if (this.playerConfig.unityControllerType == ControllerType.xBox360Mac)
         {
             return (Input.GetAxis(Controllers.xBox360.Mac.MoveAxisX(this.playerConfig.playerNumber)) > this.axisMargin);
         }
-        else if (this.playerConfig.controllerType == ControllerType.xBox360Linux)
+		else if (this.playerConfig.unityControllerType == ControllerType.xBox360Linux)
         {
             return (Input.GetAxis(Controllers.xBox360.Linux.MoveAxisX(this.playerConfig.playerNumber)) > this.axisMargin);
         }
@@ -92,19 +93,19 @@ public class PlayerMovement : MonoBehaviour {
 
     public bool IsMoveLeft()
     {
-        if (this.playerConfig.controllerType == ControllerType.KeyboardMouse)
+		if (this.playerConfig.unityControllerType == ControllerType.KeyboardMouse)
         {
             return (Input.GetKey(KeyCode.A));
         }
-        else if (this.playerConfig.controllerType == ControllerType.xBox360Windows)
+		else if (this.playerConfig.unityControllerType == ControllerType.xBox360Windows)
         {
             return (Input.GetAxis(Controllers.xBox360.Windows.MoveAxisX(this.playerConfig.playerNumber)) < -this.axisMargin);
         }
-        else if (this.playerConfig.controllerType == ControllerType.xBox360Mac)
+		else if (this.playerConfig.unityControllerType == ControllerType.xBox360Mac)
         {
             return (Input.GetAxis(Controllers.xBox360.Mac.MoveAxisX(this.playerConfig.playerNumber)) < -this.axisMargin);
         }
-        else if (this.playerConfig.controllerType == ControllerType.xBox360Linux)
+		else if (this.playerConfig.unityControllerType == ControllerType.xBox360Linux)
         {
             return (Input.GetAxis(Controllers.xBox360.Linux.MoveAxisX(this.playerConfig.playerNumber)) < -this.axisMargin);
         }
@@ -114,19 +115,19 @@ public class PlayerMovement : MonoBehaviour {
 
     public bool IsMoveUp()
     {
-        if (this.playerConfig.controllerType == ControllerType.KeyboardMouse)
+		if (this.playerConfig.unityControllerType == ControllerType.KeyboardMouse)
         {
             return (Input.GetKey(KeyCode.W));
         }
-        else if (this.playerConfig.controllerType == ControllerType.xBox360Windows)
+		else if (this.playerConfig.unityControllerType == ControllerType.xBox360Windows)
         {
             return (Input.GetAxis(Controllers.xBox360.Windows.MoveAxisY(this.playerConfig.playerNumber)) < -this.axisMargin);
         }
-        else if (this.playerConfig.controllerType == ControllerType.xBox360Mac)
+		else if (this.playerConfig.unityControllerType == ControllerType.xBox360Mac)
         {
             return (Input.GetAxis(Controllers.xBox360.Mac.MoveAxisY(this.playerConfig.playerNumber)) < -this.axisMargin);
         }
-        else if (this.playerConfig.controllerType == ControllerType.xBox360Linux)
+		else if (this.playerConfig.unityControllerType == ControllerType.xBox360Linux)
         {
             return (Input.GetAxis(Controllers.xBox360.Linux.MoveAxisY(this.playerConfig.playerNumber)) < -this.axisMargin);
         }
@@ -136,19 +137,19 @@ public class PlayerMovement : MonoBehaviour {
 
     public bool IsMoveDown()
     {
-        if (this.playerConfig.controllerType == ControllerType.KeyboardMouse)
+		if (this.playerConfig.unityControllerType == ControllerType.KeyboardMouse)
         {
             return (Input.GetKey(KeyCode.S));
         }
-        else if (this.playerConfig.controllerType == ControllerType.xBox360Windows)
+		else if (this.playerConfig.unityControllerType == ControllerType.xBox360Windows)
         {
             return (Input.GetAxis(Controllers.xBox360.Windows.MoveAxisY(this.playerConfig.playerNumber)) > this.axisMargin);
         }
-        else if (this.playerConfig.controllerType == ControllerType.xBox360Mac)
+		else if (this.playerConfig.unityControllerType == ControllerType.xBox360Mac)
         {
             return (Input.GetAxis(Controllers.xBox360.Mac.MoveAxisY(this.playerConfig.playerNumber)) > this.axisMargin);
         }
-        else if (this.playerConfig.controllerType == ControllerType.xBox360Linux)
+		else if (this.playerConfig.unityControllerType == ControllerType.xBox360Linux)
         {
             return (Input.GetAxis(Controllers.xBox360.Linux.MoveAxisY(this.playerConfig.playerNumber)) > this.axisMargin);
         }
@@ -157,7 +158,7 @@ public class PlayerMovement : MonoBehaviour {
     }
 
 	public Vector3 GetPositionToDropFromDirection(Vector3 direction) {
-		return gameObject.transform.position + (1.5f * direction.normalized);
+		return gameObject.transform.position + (2.0f * direction.normalized);
 	}
 
 	public Vector3 GetPositionInFront() {
@@ -171,9 +172,13 @@ public class PlayerMovement : MonoBehaviour {
 	}
 
 	public Vector3 GetFrontDirection() {
-		Vector3 frontDirection = lastMovementDirection.normalized;
+		Vector3 frontDirection = playerFistAttack.GetDirection().normalized;
 		if (lastMovementDirection == Vector3.zero) {
 			frontDirection =  new Vector3 (1.0f, 0.0f, 0.0f);
+		}
+		if (playerFistAttack.GetDirection () != null) {
+			frontDirection = playerFistAttack.GetDirection() - gameObject.transform.position;
+			frontDirection = frontDirection.normalized;
 		}
 		return frontDirection;
 	}
