@@ -37,7 +37,7 @@ public class GameConfig : Singleton<GameConfig>{
 			newConfig.unityControllerType = ControllerType.KeyboardMouse;
 			break;
 		case ControlType.Controller:
-			newConfig.unityControllerType = ControllerType.xBox360Windows;
+			newConfig.unityControllerType = ControllerType.xBox360Mac;
 			break;
 		case ControlType.AI:
 			newConfig.unityControllerType = ControllerType.None;
@@ -54,10 +54,10 @@ public class GameConfig : Singleton<GameConfig>{
 		PlayerConfig bluePlayerConfig;
 
 		bluePlayerConfig = new PlayerConfig ();
-        bluePlayerConfig.playerNumber = "2";
+        bluePlayerConfig.playerNumber = "1";
         bluePlayerConfig.crosshairColor = Color.blue;
-		bluePlayerConfig.unityControllerType = ControllerType.KeyboardMouse;
-		bluePlayerConfig.controlType = ControlType.Keyboard;
+		bluePlayerConfig.unityControllerType = ControllerType.xBox360Mac;
+		bluePlayerConfig.controlType = ControlType.Controller;
 
 		playerConfig [Team.Blue] = bluePlayerConfig;
 
@@ -65,7 +65,7 @@ public class GameConfig : Singleton<GameConfig>{
 		PlayerConfig redPlayerConfig;
 
 		redPlayerConfig = new PlayerConfig ();
-		redPlayerConfig.playerNumber = "1";
+		redPlayerConfig.playerNumber = "2";
 		redPlayerConfig.crosshairColor = Color.red;
 		redPlayerConfig.unityControllerType = ControllerType.None;
 		redPlayerConfig.controlType = ControlType.AI;

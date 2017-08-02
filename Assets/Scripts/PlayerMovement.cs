@@ -23,6 +23,7 @@ public class PlayerMovement : MonoBehaviour {
 	private PlayerBatteryManager playerBatteryManager;
 	private PlayerFistAttack playerFistAttack;
 	private Vector3 lastMovementDirection = Vector3.zero;
+    private SpriteRenderer spriteRenderer;
 
     void Awake () {
 		gameManager = GameObject.Find("Level").GetComponent<GameManager>();
@@ -35,6 +36,7 @@ public class PlayerMovement : MonoBehaviour {
 		playerBatteryManager = gameObject.GetComponent<PlayerBatteryManager> ();
         playerConfig = GameConfig.Instance.GetPlayerConfig(this.tag);
 		playerFistAttack = gameObject.GetComponent<PlayerFistAttack> ();
+        spriteRenderer = this.transform.Find("Sprite").GetComponent<SpriteRenderer>();
     }
 	
 	void Update () {
@@ -63,6 +65,8 @@ public class PlayerMovement : MonoBehaviour {
             this.refAnimator.SetInteger("State", (int)PlayerState.Run);
         else if (this.refAnimator.GetInteger("State") != (int)PlayerState.Stun)
             this.refAnimator.SetInteger("State", (int)PlayerState.Idle);
+
+        spriteRenderer.sortingOrder = (int)this.transform.position.z * -100;
     }
 
 	public void StopPlayer() {
@@ -158,7 +162,7 @@ public class PlayerMovement : MonoBehaviour {
     }
 
 	public Vector3 GetPositionToDropFromDirection(Vector3 direction) {
-		return gameObject.transform.position + (2.0f * direction.normalized);
+		return gameObject.transform.position + (1.5f * direction.normalized);
 	}
 
 	public Vector3 GetPositionInFront() {

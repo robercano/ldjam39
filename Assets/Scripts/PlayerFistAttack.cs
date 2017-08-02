@@ -91,7 +91,8 @@ public class PlayerFistAttack : MonoBehaviour {
 	{
 		battery = Instantiate (batteryPrefab, transform);
 		battery.SetActive (false);
-	}
+        spriteRendererBatteryAvatar = battery.transform.Find("Sprite").GetComponent<SpriteRenderer>();
+    }
 
 	void InstantiateCrosshair ()
 	{
@@ -114,11 +115,11 @@ public class PlayerFistAttack : MonoBehaviour {
 	{
 		leftFist = Instantiate (fistPrefab, transform);
 		leftFistScript = leftFist.GetComponent<Fist> ();
-		leftFistScript.Initialize(Fist.Type.Left, this.tag, damage, forwardFistDistance ,lateralFistDistance);
+		leftFistScript.Initialize(Fist.Type.Left, this.tag, damage, forwardFistDistance ,lateralFistDistance, this);
 
 		rightFist = Instantiate (fistPrefab, transform);
 		rightFistScript = rightFist.GetComponent<Fist> ();
-		rightFistScript.Initialize(Fist.Type.Right, this.tag, damage, forwardFistDistance ,lateralFistDistance);
+		rightFistScript.Initialize(Fist.Type.Right, this.tag, damage, forwardFistDistance ,lateralFistDistance, this);
 	}
 
 	void UpdateBatteryPosition()
@@ -126,7 +127,8 @@ public class PlayerFistAttack : MonoBehaviour {
 		Vector3 batteryPosition = (target - transform.position).normalized * batteryDistance;
 		batteryPosition.y = 0.0f;
 		battery.transform.localPosition = batteryPosition;
-	}
+        spriteRendererBatteryAvatar.sortingOrder = (int)this.transform.position.z * -100;
+    }
 
 	void UpdateFistsPosition()
 	{
@@ -221,6 +223,7 @@ public class PlayerFistAttack : MonoBehaviour {
 	private Crosshair crosshairScript;
 	private PlayerHealth playerHealthScript;
     private SpriteRenderer spriteRenderer;
+    private SpriteRenderer spriteRendererBatteryAvatar;
     private Animator animator;
     private bool isInputEnabled = true;
 	private Vector3 target;

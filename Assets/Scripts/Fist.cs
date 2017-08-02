@@ -26,7 +26,7 @@ public class Fist : MonoBehaviour {
 		return state;
 	}
 
-	public void Initialize(Type type, string tag, int damage, float lateralDistance, float forwardDistance)
+	public void Initialize(Type type, string tag, int damage, float lateralDistance, float forwardDistance, PlayerFistAttack playerFistAttack)
 	{
 		SetType (type);
 		SetTag (tag);
@@ -37,7 +37,9 @@ public class Fist : MonoBehaviour {
 		layerMask = LayerMask.GetMask(new string[] {"Player", "Stage", "Wall"});
 
 		opponent = GameObject.Find (GetOpponentName ());
-	}
+        this.playerFistAttack = playerFistAttack;
+
+    }
 
 	public void SetType(Type type)
 	{
@@ -90,8 +92,9 @@ public class Fist : MonoBehaviour {
 
 		rigidBody = GetComponent<Rigidbody> ();
 		sphereCollider = GetComponent<SphereCollider> ();
+        spriteRenderer = this.transform.Find("Sprite").GetComponent<SpriteRenderer>();
 
-		sphereCollider.enabled = false;
+        sphereCollider.enabled = false;
 		this.name = "Fist";
 	}
 
@@ -115,7 +118,8 @@ public class Fist : MonoBehaviour {
 			UpdateShotFist ();
 			break;
 		}
-	}
+
+    }
 
 	void UpdateIdleFist ()
 	{
@@ -131,7 +135,9 @@ public class Fist : MonoBehaviour {
 
 		fistPosition.y = 0.0f;
 		transform.localPosition = fistPosition;
-	}
+
+        spriteRenderer.sortingOrder = (int)playerFistAttack.transform.position.z * -100;
+    }
 		
 	void UpdateShotFist()
 	{
@@ -150,7 +156,9 @@ public class Fist : MonoBehaviour {
 
 		rigidBody.velocity = Vector3.RotateTowards(rigidBody.velocity, opponentDirection, homingAngle * Mathf.Deg2Rad, 0.0f);
 		lastRigidBodyVelocity = rigidBody.velocity;
-	}
+
+        spriteRenderer.sortingOrder = (int)this.transform.position.z * -100;
+    }
 
 	public Vector3 GetDirectionFromAngle(float angle)
 	{
@@ -277,7 +285,9 @@ public class Fist : MonoBehaviour {
 	Vector3 forwardDirection = Vector3.right;
 	Rigidbody rigidBody;
 	SphereCollider sphereCollider;
-	int damage;
+    SpriteRenderer spriteRenderer;
+    PlayerFistAttack playerFistAttack;
+    int damage;
 	int playerLayerID;
 	Vector3 lastRigidBodyVelocity = Vector3.up;
     CameraManager cameraManager;

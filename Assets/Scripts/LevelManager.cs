@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using com.kleberswf.lib.core;
 
-public class LevelManager : Singleton<LevelManager> {
+public class LevelManager : MonoBehaviour {
 	public GameObject RedPlayerPrefab;
 	public GameObject BluePlayerPrefab;
 	public GameObject RedBasePrefab;
@@ -26,94 +26,94 @@ public class LevelManager : Singleton<LevelManager> {
 
 	string[] level1Config = {
         "W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W",
-        "W 0 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
-        "W 0 A 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
-        "W 0 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
-        "W 0 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
-        "W 0 0 0 0 W 0 0 0 0 0 0 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+        "W W W W W W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W W W W W W",
+        "W W W W W W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W W W W W W",
+        "W W W W W W 0 0 W W 0 0 W W W W W W W 0 0 W W 0 0 W W W W W W",
+        "W W W W W W 0 0 W W 0 0 W W W W W W W 0 0 W W 0 0 W W W W W W",
         "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
-        "W 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 W",
+        "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+        "W 0 A 0 0 1 0 0 W W 0 0 0 0 0 0 0 0 0 0 0 W W 0 0 2 0 B 0 0 W",
+        "W 0 0 0 0 0 0 0 W W 0 0 0 0 0 0 0 0 0 0 0 W W 0 0 0 0 0 0 0 W",
         "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
         "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
-        "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 0 W",
-        "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 0 0 0 0 0 0 W 0 0 0 0 W",
-        "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W 0 B 0 0 W",
-        "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 0 W",
-        "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 0 W",
+        "W W W W W W 0 0 W W 0 0 W W W W W W W 0 0 W W 0 0 W W W W W W",
+        "W W W W W W 0 0 W W 0 0 W W W W W W W 0 0 W W 0 0 W W W W W W",
+        "W W W W W W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W W W W W W",
+        "W W W W W W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W W W W W W",
         "W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W"
     };
 	string[] level2Config = {
-		"W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W",
-		"W 0 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
-		"W 0 A 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
-		"W 0 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
-		"W 0 0 0 0 W 0 0 0 0 0 0 0 W 0 3 0 W 0 0 0 0 0 0 0 0 0 0 0 0 W",
-		"W 0 0 0 0 W 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 W",
-		"W 0 1 0 0 0 0 0 0 0 0 0 0 W 0 3 0 W 0 0 0 0 0 0 0 0 0 0 2 0 W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 3 0 W 0 0 0 0 0 0 0 W 0 0 0 0 W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 W 0 0 0 0 W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W 0 B 0 0 W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 0 W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 0 W",
-		"W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W"
-	};
+        "W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W",
+        "W W W W W W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W W W W W",
+        "W W W W W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W W W W",
+        "W W W W 0 0 0 0 W W 0 0 0 0 0 0 0 0 0 0 0 W W 0 0 0 0 0 W W W",
+        "W W W 0 0 0 0 W W W 0 0 0 0 0 3 0 0 0 0 0 W W W 0 0 0 0 0 W W",
+        "W W 0 0 0 0 W W W 0 0 0 0 0 0 0 0 0 0 0 0 0 W W W 0 0 0 0 0 W",
+        "W 0 0 0 0 0 W W 0 0 0 0 0 0 W W W 0 0 0 0 0 0 W W 0 0 0 0 0 W",
+        "W 0 A 0 0 1 0 0 0 0 0 0 0 W W W W W 0 0 0 0 0 0 0 2 0 B 0 0 W",
+        "W 0 0 0 0 0 0 0 0 0 0 0 0 W W W W W 0 0 0 0 0 0 0 0 0 0 0 0 W",
+        "W 0 0 0 0 0 W W 0 0 0 0 0 0 W W W 0 0 0 0 0 0 W W 0 0 0 0 0 W",
+        "W W 0 0 0 0 W W W 0 0 0 0 0 0 0 0 0 0 0 0 0 W W W 0 0 0 0 W W",
+        "W W W 0 0 0 0 W W W 0 0 0 0 0 3 0 0 0 0 0 W W W 0 0 0 0 W W W",
+        "W W W W 0 0 0 0 W W 0 0 0 0 0 0 0 0 0 0 0 W W 0 0 0 0 W W W W",
+        "W W W W W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W W W W W",
+        "W W W W W W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W W W W W W",
+        "W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W"
+    };
 	string[] level3Config = {
-		"W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
-		"W 0 A 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 3 0 W 0 0 0 0 0 0 0 0 0 0 0 0 W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 W",
-		"W 0 1 0 0 0 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 0 0 0 2 0 W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 3 0 W 0 0 0 0 0 0 0 0 0 0 0 0 W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 B 0 0 W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
-		"W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W"
-	};
+        "W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W",
+        "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W W 0 0 0 0 0 0 W",
+        "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W W 0 0 0 B 0 0 W",
+        "W 0 0 W W W W 0 0 W W 0 0 0 0 0 W W W W 0 0 W W 0 2 0 0 0 0 W",
+        "W 0 0 W W W W 0 0 W W 0 0 0 0 0 W W W W 0 0 W W 0 0 0 0 0 0 W",
+        "W 0 0 W W 0 0 0 0 W W 0 0 3 0 0 W W 0 0 0 0 0 0 0 0 0 0 0 0 W",
+        "W 0 0 W W 0 0 0 0 W W 0 0 0 0 0 W W 0 0 0 0 0 0 0 0 0 0 0 0 W",
+        "W 0 0 0 0 0 0 W W W W 0 0 0 0 0 0 0 0 0 W W W W 0 0 0 0 0 0 W",
+        "W 0 0 0 0 0 0 W W W W 0 0 0 0 0 0 0 0 0 W W W W 0 0 0 0 0 0 W",
+        "W 0 0 0 0 0 0 0 0 0 0 0 0 W W 0 0 0 0 0 W W 0 0 0 0 W W 0 0 W",
+        "W 0 0 0 0 0 0 0 0 0 0 0 0 W W 0 0 3 0 0 W W 0 0 0 0 W W 0 0 W",
+        "W 0 0 0 0 0 0 W W 0 0 W W W W 0 0 0 0 0 W W 0 0 W W W W 0 0 W",
+        "W 0 A 0 0 1 0 W W 0 0 W W W W 0 0 0 0 0 W W 0 0 W W W W 0 0 W",
+        "W 0 0 0 0 0 0 W W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+        "W 0 0 0 0 0 0 W W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+        "W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W"
+    };
 	string[] level4Config = {
-		"W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W",
-		"W 0 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
-		"W 0 A 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
-		"W 0 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
-		"W 0 0 0 0 W 0 0 0 0 0 0 0 W W W W W 0 0 0 0 0 0 0 0 0 0 0 0 W",
-		"W 0 0 0 0 W 0 0 0 0 0 0 0 W 0 3 0 W 0 0 0 0 0 0 0 0 0 0 0 0 W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 W",
-		"W 0 1 0 0 0 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 0 0 0 2 0 W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 W 0 0 0 0 W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 W 0 0 0 0 0 0 0 W 0 0 0 0 W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W 0 B 0 0 W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 0 W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 0 W",
-		"W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W"
-	};
+        "W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W",
+        "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+        "W 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+        "W 0 0 0 0 0 0 0 0 W W W W W 0 0 W W W W W W W W 0 0 W W 0 0 W",
+        "W 0 0 0 1 0 0 0 0 W W W W W 0 0 W W W W W W W W 0 0 W W 0 0 W",
+        "W 0 0 0 0 0 0 0 0 W W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W W 0 0 W",
+        "W 0 0 0 0 0 0 0 0 W W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W W 0 0 W",
+        "W 0 0 W W W W 0 0 0 0 0 0 A 0 0 B 0 0 0 W W 0 0 W W W W 0 0 W",
+        "W 0 0 W W W W 0 0 0 0 0 0 0 0 0 0 0 0 0 W W 0 0 W W W W 0 0 W",
+        "W 0 0 W W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W W 0 0 0 0 0 0 0 0 W",
+        "W 0 0 W W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W W 0 0 0 0 0 0 0 0 W",
+        "W 0 0 W W 0 0 W W W W W W W W 0 0 W W W W W 0 0 0 0 2 0 0 0 W",
+        "W 0 0 W W 0 0 W W W W W W W W 0 0 W W W W W 0 0 0 0 0 0 0 0 W",
+        "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 W",
+        "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+        "W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W"
+    };
 	string[] level5Config = {
-		"W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W",
-		"W 0 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
-		"W 0 A 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 B 0 0 W",
-		"W 0 0 0 0 W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
-		"W 0 0 0 0 W 0 0 0 0 0 0 0 0 W W W 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
-		"W 0 0 0 0 W 0 0 0 0 0 0 0 0 W 3 W 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
-		"W 0 0 0 0 0 0 0 0 0 W W W W W 0 W W W W W 0 0 0 0 0 0 0 0 0 W",
-		"W 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
-		"W 0 0 0 0 0 0 0 0 0 W W W W W W W W W W W 0 0 0 0 0 0 0 0 0 W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 0 W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 0 W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 0 W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 0 W",
-		"W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W 0 0 0 0 W",
-		"W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W"
-	};
+        "W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W",
+        "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+        "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+        "W 0 0 W W 0 0 0 0 0 0 0 0 0 0 0 0 W W 0 0 0 0 0 2 0 B 0 0 0 W",
+        "W 0 0 W W W 0 0 0 0 0 0 0 0 0 0 0 W W W 0 0 0 0 0 0 0 0 0 0 W",
+        "W 0 0 0 W W W 0 0 0 0 0 0 0 0 0 0 0 W W W 0 0 0 0 0 0 0 0 0 W",
+        "W 0 0 0 0 W W W 0 0 0 0 3 0 0 0 0 0 0 W W W 0 0 0 0 0 0 0 0 W",
+        "W 0 0 0 0 0 W W W 0 0 0 0 0 W W W 0 0 0 W W W 0 0 0 0 0 0 0 W",
+        "W 0 0 0 0 0 0 W W W 0 0 0 0 W W W 0 0 0 0 W W W 0 0 0 0 0 0 W",
+        "W 0 0 0 0 0 0 0 W W W 0 0 0 0 0 0 0 0 0 0 0 W W W 0 0 0 0 0 W",
+        "W 0 0 0 0 0 0 0 0 W W W 0 0 0 0 0 0 0 0 0 0 0 W W W 0 0 0 0 W",
+        "W 0 0 A 0 0 1 0 0 0 W W W 0 0 0 0 0 3 0 0 0 0 0 W W W 0 0 0 W",
+        "W 0 0 0 0 0 0 0 0 0 0 W W 0 0 0 0 0 0 0 0 0 0 0 0 W W 0 0 0 W",
+        "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+        "W 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 W",
+        "W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W W"
+    };
 
 	public static int MaxLevels = 5;
 	public static int CurrentLevel = 0;
@@ -175,9 +175,6 @@ public class LevelManager : Singleton<LevelManager> {
 	{
 		SpawnPlayer (RedPlayerPrefab, RedPlayerName, RedPlayerGameTag, RedPlayerSpawnTileGameTag);
 		SpawnPlayer (BluePlayerPrefab, BluePlayerName, BluePlayerGameTag, BluePlayerSpawnTileGameTag);
-
-		SpawnBase (RedBasePrefab, RedBaseName, RedPlayerGameTag, RedBaseSpawnTileGameTag);
-		SpawnBase (BlueBasePrefab, BlueBaseName, BluePlayerGameTag, BlueBaseSpawnTileGameTag);
 	}
 
 	void Awake()
@@ -246,17 +243,17 @@ public class LevelManager : Singleton<LevelManager> {
 	{
 		floorTileColors = new Color[4];
 
-		floorTileColors [0] = new Color (200/255.0f, 200/255.0f, 200/255.0f);
-		floorTileColors [1] = new Color (210/255.0f, 210/255.0f, 210/255.0f);
-		floorTileColors [2] = new Color (230/255.0f, 230/255.0f, 230/255.0f);
-		floorTileColors [3] = new Color (255/255.0f, 255/255.0f, 255/255.0f);
+		floorTileColors [0] = new Color (200/255.0f, 200 / 255.0f, 200 / 255.0f);
+		floorTileColors [1] = new Color (220/255.0f, 220 / 255.0f, 220 / 255.0f);
+		floorTileColors [2] = new Color (240/255.0f, 240 / 255.0f, 240 / 255.0f);
+		floorTileColors [3] = new Color (255/255.0f, 255/ 255.0f, 255/ 255.0f);
 
 		wallTileColors = new Color[4];
 
-		wallTileColors [0] = new Color (200/255.0f, 200/255.0f, 200/255.0f);
-		wallTileColors [1] = new Color (210/255.0f, 210/255.0f, 210/255.0f);
-		wallTileColors [2] = new Color (230/255.0f, 230/255.0f, 230/255.0f);
-		wallTileColors [3] = new Color (255/255.0f, 255/255.0f, 255/255.0f);
+		wallTileColors [0] = new Color (200 / 255.0f, 200 / 255.0f, 200 / 255.0f);
+		wallTileColors [1] = new Color (220 / 255.0f, 220 / 255.0f, 220 / 255.0f);
+		wallTileColors [2] = new Color (240 / 255.0f, 240 / 255.0f, 240 / 255.0f);
+		wallTileColors [3] = new Color (255 / 255.0f, 255 / 255.0f, 255 / 255.0f);
 	}
 
 	#endregion // Configuration setup methods
@@ -267,7 +264,10 @@ public class LevelManager : Singleton<LevelManager> {
 
 		LoadLevelConfig (level, out levelConfig);
 		GenerateLevelFromConfig (levelConfig);
-	}
+
+        SpawnBase(RedBasePrefab, RedBaseName, RedPlayerGameTag, RedBaseSpawnTileGameTag);
+        SpawnBase(BlueBasePrefab, BlueBaseName, BluePlayerGameTag, BlueBaseSpawnTileGameTag);
+    }
 
 	GameObject GetTilePrefabByConfigTag(string configTag)
 	{
@@ -502,9 +502,9 @@ public class LevelManager : Singleton<LevelManager> {
 		} else if (randomChoice >= 0.45f) {
 			colorIndex = 3;
 		}
-		SpriteRenderer spriteRenderer = tile.GetComponentsInChildren<SpriteRenderer> () [0];
 
-		spriteRenderer.color = colorSelection[colorIndex];
+        tile.GetComponentsInChildren<SpriteRenderer>()[0].color = colorSelection[colorIndex];
+ 
 	}
 
 	void RandomizeTileHeight (GameObject tile, int row, int column)

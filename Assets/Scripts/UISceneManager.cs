@@ -5,7 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class UISceneManager : MonoBehaviour {
 
-	public void GoToControllerMenu() {
+    private void Start() {
+        Cursor.visible = true;
+        LevelManager.CurrentLevel = 0;
+    }
+
+    public void GoToControllerMenu() {
 		SceneManager.LoadScene("ControllerMenu");
 	}
 

@@ -51,6 +51,7 @@
      <Compile Include="Assets\NavMeshComponents\Scripts\NavMeshModifierVolume.cs" />
      <Compile Include="Assets\NavMeshComponents\Scripts\NavMeshSurface.cs" />
      <Compile Include="Assets\Scripts\AgentManager.cs" />
+     <Compile Include="Assets\Scripts\BatteryManager.cs" />
      <Compile Include="Assets\Scripts\Bullet.cs" />
      <Compile Include="Assets\Scripts\CameraControl.cs" />
      <Compile Include="Assets\Scripts\CameraManager.cs" />
@@ -70,6 +71,7 @@
      <Compile Include="Assets\Scripts\PlayerFistAttack.cs" />
      <Compile Include="Assets\Scripts\PlayerHealth.cs" />
      <Compile Include="Assets\Scripts\PlayerMovement.cs" />
+     <Compile Include="Assets\Scripts\PlayerTriggerManager.cs" />
      <Compile Include="Assets\Scripts\SceneBatteryManager.cs" />
      <Compile Include="Assets\Scripts\TextManager.cs" />
      <Compile Include="Assets\Scripts\UIGenericButtonController.cs" />

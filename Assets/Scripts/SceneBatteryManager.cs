@@ -51,7 +51,7 @@ public class SceneBatteryManager : MonoBehaviour {
 	}
 
 	private void DropBatteryFromPlayer(GameObject player, Vector3 position, Vector3 forceToDropBattery) {
-		GameObject droppedBattery = Instantiate (batteryPrefab, position, Quaternion.identity);
+		GameObject droppedBattery = Instantiate (batteryPrefab, player.transform.position, Quaternion.identity);
 		Rigidbody droppedBatteryRB = droppedBattery.GetComponent<Rigidbody> ();
 		droppedBatteryRB.AddForce(forceToDropBattery.x, forceToDropBattery.y, forceToDropBattery.z, ForceMode.Impulse);
 
