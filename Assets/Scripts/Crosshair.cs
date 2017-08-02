@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Crosshair : MonoBehaviour
 {
+    public int referenceScreenWidth = 2560;
+
     public Vector3 worldPosition;
     [Range(1f, 20f)]
     public float mouseSensivity = 10;
@@ -29,49 +31,52 @@ public class Crosshair : MonoBehaviour
         playerConfig = GameConfig.Instance.GetPlayerConfig(this.tag);
         playerObject = GameObject.Find(this.tag + "Player");
 
-		transform.localPosition = new Vector3 (0.0f, 0.0f, -1.0f) * gamepadDistance;
+        transform.localPosition = new Vector3(0.0f, 0.0f, -1.0f) * gamepadDistance;
     }
 
     void FixedUpdate()
     {
+        UpdateCrosshairSize();
+
         if (gameManager.gameState != GameState.InGame)
             return;
 
-		if (this.playerConfig.unityControllerType == ControllerType.KeyboardMouse)
+        if (this.playerConfig.unityControllerType == ControllerType.KeyboardMouse)
         {
-//            Vector3 mouseOffset = new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"), 0f) * this.mouseSensivity;
-//            transform.position += mouseOffset;
-			transform.position = Input.mousePosition;
+            transform.position = Input.mousePosition;
         }
         else
         {
             Vector3 newGamepadDirection = Vector3.zero;
 
-			if (this.playerConfig.unityControllerType == ControllerType.xBox360Windows)
+            if (this.playerConfig.unityControllerType == ControllerType.xBox360Windows)
             {
-				newGamepadDirection.x = Input.GetAxis(Controllers.xBox360.Windows.AimAxisX(this.playerConfig.playerNumber));
-				newGamepadDirection.y = -Input.GetAxis(Controllers.xBox360.Windows.AimAxisY(this.playerConfig.playerNumber));
+                newGamepadDirection.x = Input.GetAxis(Controllers.xBox360.Windows.AimAxisX(this.playerConfig.playerNumber));
+                newGamepadDirection.y = -Input.GetAxis(Controllers.xBox360.Windows.AimAxisY(this.playerConfig.playerNumber));
             }
-			else if (this.playerConfig.unityControllerType == ControllerType.xBox360Mac)
+            else if (this.playerConfig.unityControllerType == ControllerType.xBox360Mac)
             {
-				newGamepadDirection.x = Input.GetAxis(Controllers.xBox360.Mac.AimAxisX(this.playerConfig.playerNumber));
-				newGamepadDirection.y = -Input.GetAxis(Controllers.xBox360.Mac.AimAxisY(this.playerConfig.playerNumber));
+                newGamepadDirection.x = Input.GetAxis(Controllers.xBox360.Mac.AimAxisX(this.playerConfig.playerNumber));
+                newGamepadDirection.y = -Input.GetAxis(Controllers.xBox360.Mac.AimAxisY(this.playerConfig.playerNumber));
             }
-			else if (this.playerConfig.unityControllerType == ControllerType.xBox360Linux)
+            else if (this.playerConfig.unityControllerType == ControllerType.xBox360Linux)
             {
-				newGamepadDirection.x = Input.GetAxis(Controllers.xBox360.Linux.AimAxisX(this.playerConfig.playerNumber));
-				newGamepadDirection.y = -Input.GetAxis(Controllers.xBox360.Linux.AimAxisY(this.playerConfig.playerNumber));
+                newGamepadDirection.x = Input.GetAxis(Controllers.xBox360.Linux.AimAxisX(this.playerConfig.playerNumber));
+                newGamepadDirection.y = -Input.GetAxis(Controllers.xBox360.Linux.AimAxisY(this.playerConfig.playerNumber));
             }
 
-			if (newGamepadDirection.magnitude > 0.5) {
-				gamepadDirection = newGamepadDirection.normalized;
-			} else {
-				gamepadDirection = new Vector3(0.0f, 0.0f, -1.0f);
-			}
+            if (newGamepadDirection.magnitude > 0.5)
+            {
+                gamepadDirection = newGamepadDirection.normalized;
+            }
+            else
+            {
+                gamepadDirection = new Vector3(0.0f, 0.0f, -1.0f);
+            }
 
-			Vector3 playerScreenPosition = Camera.main.WorldToScreenPoint (playerObject.transform.position);
+            Vector3 playerScreenPosition = Camera.main.WorldToScreenPoint(playerObject.transform.position);
 
-			transform.position = playerScreenPosition + (gamepadDirection * gamepadDistance);
+            transform.position = playerScreenPosition + (gamepadDirection * gamepadDistance);
         }
 
         //Clamp to screen limits
@@ -83,12 +88,24 @@ public class Crosshair : MonoBehaviour
         //Translate to world position
         float rayDistance;
         Ray ray = Camera.main.ScreenPointToRay(transform.position);
-        Debug.DrawRay(ray.origin, ray.direction, Color.cyan);
+        //Debug.DrawRay(ray.origin, ray.direction, Color.cyan);
         if (groundPlane.Raycast(ray, out rayDistance))
         {
             worldPosition = ray.GetPoint(rayDistance);
             worldPosition.y = 0.5f;
         }
-            
+
+    }
+
+    void UpdateCrosshairSize()
+    {
+        float newScale = (float)Screen.width / (float)referenceScreenWidth;
+
+        Vector3 scale = transform.localScale;
+
+        scale.x = newScale;
+        scale.y = newScale;
+
+        transform.localScale = scale;
     }
 }

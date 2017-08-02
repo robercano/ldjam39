@@ -256,8 +256,11 @@ public class Fist : MonoBehaviour {
 	{
 		// TODO: player.GetComponent() can be moved to GameManager so the component is already fetched
 		PlayerHealth playerHealthScript = player.GetComponent ("PlayerHealth") as PlayerHealth;
-		playerHealthScript.ApplyDamage (damage, lastRigidBodyVelocity);
-		AudioSource.PlayClipAtPoint (hitRobotSound, Camera.main.transform.position);
+        if (!playerHealthScript.IsInvulnerable())
+        {
+            playerHealthScript.ApplyDamage(damage, lastRigidBodyVelocity);
+            AudioSource.PlayClipAtPoint(hitRobotSound, Camera.main.transform.position);
+        }
 	}
 	
 	string GetOpponentGameTag()

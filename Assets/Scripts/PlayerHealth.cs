@@ -5,7 +5,9 @@ using UnityEngine;
 public class PlayerHealth : MonoBehaviour {
 	public int maxHealth = 100;
 	public float knockedOutTime = 2.0f;
-	public AudioClip knockedOutSound;
+    public float invulnerabilityTime = 4.0f;
+    public float invulnerabilityAlpha = 0.6f;
+    public AudioClip knockedOutSound;
 	public AudioClip recoverSound;
 
 	private float timeFromLastKnockOut;
@@ -15,12 +17,12 @@ public class PlayerHealth : MonoBehaviour {
 	private int currentHealth = 0;
 	private PlayerBatteryManager playerBatteryManager;
 	private PlayerMovement playerMovementScript;
-	private AudioSource audioSource;
+    private SpriteRenderer spriteRenderer;
+    private AudioSource audioSource;
     private Animator animator;
 
     #region - Public methods
-    public void ApplyDamage(int damage, Vector3 damageDirection)
-	{
+    public void ApplyDamage(int damage, Vector3 damageDirection) {
 		currentHealth -= damage;
 
 		if (currentHealth < 0) {
@@ -32,15 +34,21 @@ public class PlayerHealth : MonoBehaviour {
 	public bool IsKnockedOut() {
 		return isKnockedOut;
 	}
-	#endregion
 
-	#region - Private methods
-	void Awake () {
+    public bool IsInvulnerable() {
+        return ((Time.time - timeFromLastKnockOut) < invulnerabilityTime);   
+    }
+    #endregion
+
+    #region - Private methods
+    void Awake () {
 		currentHealth = maxHealth;
 		playerBatteryManager = gameObject.GetComponent<PlayerBatteryManager> ();
 		playerMovementScript = gameObject.GetComponent<PlayerMovement> ();
-        animator = transform.Find("Sprite").GetComponent<Animator>();
-    }
+        GameObject sprite = transform.Find("Sprite").gameObject;
+        spriteRenderer = sprite.GetComponent<SpriteRenderer>();
+        animator = sprite.GetComponent<Animator>();
+}
 
 	void Start () {
 		audioSource = GetComponent<AudioSource>();
@@ -49,9 +57,20 @@ public class PlayerHealth : MonoBehaviour {
 	void Update () {
 		CheckHealth ();
 		CheckKnockedOut ();
+        CheckInvulnerability();
 	}
 
-	void CheckKnockedOut() {
+    void CheckInvulnerability() {
+        if (IsInvulnerable()) {
+            if (spriteRenderer.color.a == 1f)
+                spriteRenderer.color = new Color(1f, 1f, 1f, invulnerabilityAlpha);
+        } else {
+            if (spriteRenderer.color.a != 1f)
+                spriteRenderer.color = Color.white;
+        }
+    }
+
+    void CheckKnockedOut() {
 		if (IsKnockedOut ()) {
 			if ((Time.time - timeFromLastKnockOut) >= knockedOutTime) {
 				RecoverFromKnockOut ();

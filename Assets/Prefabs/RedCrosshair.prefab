@@ -40,6 +40,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c363d6a2139733a4e970bba3714e8960, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  referenceScreenWidth: 2560
   worldPosition: {x: 0, y: 0, z: 0}
   mouseSensivity: 10
   gamepadDistance: 100

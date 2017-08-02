@@ -223,7 +223,6 @@ GameObject:
   - component: {fileID: 1176861892}
   - component: {fileID: 1176861891}
   - component: {fileID: 1176861890}
-  - component: {fileID: 1176861895}
   - component: {fileID: 1176861896}
   m_Layer: 0
   m_Name: Main Camera
@@ -303,17 +302,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 66, y: 0, z: 0}
---- !u!114 &1176861895
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1176861889}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfe019c6240c74f2b958b29eaba4c5f4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1176861896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -446,7 +434,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2384d2c5ae5e424a907585beaf97ff6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Persistent: 1
   RedPlayerPrefab: {fileID: 1110458615083286, guid: 0ed261374b5ad07428a6ae1030dc0856,
     type: 2}
   BluePlayerPrefab: {fileID: 1110458615083286, guid: da4a96ca0859c4f8cbae4cf5c5678c1b,
@@ -483,9 +470,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioClips:
-  - {fileID: 8300000, guid: 83d51aedbb50a4349af5e86793219c9c, type: 3}
-  - {fileID: 8300000, guid: 592a154c434b04883946b0f1674b9a73, type: 3}
   - {fileID: 8300000, guid: 2a03f00b8ba90475195692fb73b85771, type: 3}
+  - {fileID: 8300000, guid: 592a154c434b04883946b0f1674b9a73, type: 3}
+  - {fileID: 8300000, guid: 83d51aedbb50a4349af5e86793219c9c, type: 3}
   - {fileID: 8300000, guid: 89891082b0eea46b68d3db0de23d59e2, type: 3}
   - {fileID: 8300000, guid: 6073007f13663402bbb3bd16ea9baadc, type: 3}
   - {fileID: 8300000, guid: d76cf6811ba61434c8c5d2caa520095c, type: 3}
@@ -502,7 +489,7 @@ AudioSource:
   m_PlayOnAwake: 0
   m_Volume: 0.692
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0

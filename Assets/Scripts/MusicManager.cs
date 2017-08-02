@@ -24,7 +24,7 @@ public class MusicManager : MonoBehaviour {
 			return;
 		}
 
-		audioSource.clip = audioClips[level];
+		audioSource.clip = audioClips[level-1];
 
 		audioSource.Play();
 	}

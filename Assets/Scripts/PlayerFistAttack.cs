@@ -4,139 +4,155 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Assertions;
 
-public class PlayerFistAttack : MonoBehaviour {
-	public int damage = 1;
-	public float forwardFistDistance = 1.0f;
-	public float lateralFistDistance = 1.0f;
-	public float batteryDistance = 1.0f;
-	public GameObject fistPrefab;
-	public GameObject batteryPrefab;
-	public GameObject crosshairPrefab;
+public class PlayerFistAttack : MonoBehaviour
+{
+    public int damage = 1;
+    public float forwardFistDistance = 1.0f;
+    public float lateralFistDistance = 1.0f;
+    public float batteryDistance = 1.0f;
+    public GameObject fistPrefab;
+    public GameObject batteryPrefab;
+    public GameObject crosshairPrefab;
 
-	public void SetInputEnabled(bool enable)
-	{
-		isInputEnabled = enable;
-	}
-
-	public void SetTarget(Vector3 target)
-	{
-		this.target = target;
-		updateTarget = true;
-	}
-
-	public Vector3 GetDirection() {
-		return this.target;
-	}
-
-	public bool canShoot()
-	{
-		if (leftFistScript.GetState () == Fist.State.Idle ||
-			rightFistScript.GetState () == Fist.State.Idle) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public void Shoot()
-	{
-		isShootButtonPressed = true;
-	}
-
-	public void SetCarryBatteryEnabled(bool enable)
-	{
-		battery.SetActive (enable);
-	}
-
-    void Awake()
-	{
-        gameManager = GameObject.Find("Level").GetComponent<GameManager>();
-		batteryManager = gameObject.GetComponent<PlayerBatteryManager> ();
-		InstantiateBattery ();
+    public void SetInputEnabled(bool enable)
+    {
+        isInputEnabled = enable;
     }
 
-    void Start () {
-		InstantiateCrosshair ();
-		InstantiateFists ();
-	
-		playerHealthScript = gameObject.GetComponent<PlayerHealth> ();
+    public void SetTarget(Vector3 target)
+    {
+        this.target = target;
+        updateTarget = true;
+    }
+
+    public Vector3 GetDirection()
+    {
+        return this.target;
+    }
+
+    public bool canShoot()
+    {
+        if (leftFistScript.GetState() == Fist.State.Idle ||
+            rightFistScript.GetState() == Fist.State.Idle)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public void Shoot()
+    {
+        isShootButtonPressed = true;
+    }
+
+    public void SetCarryBatteryEnabled(bool enable)
+    {
+        battery.SetActive(enable);
+    }
+
+    void Awake()
+    {
+        gameManager = GameObject.Find("Level").GetComponent<GameManager>();
+        batteryManager = gameObject.GetComponent<PlayerBatteryManager>();
+        InstantiateBattery();
+    }
+
+    void Start()
+    {
+        InstantiateCrosshair();
+        InstantiateFists();
+
+        playerHealthScript = gameObject.GetComponent<PlayerHealth>();
         GameObject sprite = transform.Find("Sprite").gameObject;
         spriteRenderer = sprite.GetComponent<SpriteRenderer>();
         animator = sprite.GetComponent<Animator>();
     }
 
-	void Update () {
-		if (gameManager.gameState != GameState.InGame) {
-			return;
-		}
+    void Update()
+    {
+        if (gameManager.gameState != GameState.InGame)
+        {
+            return;
+        }
 
-		if (isInputEnabled) {
-			ReadInput ();
-		}
-		if (updateTarget) {
-			UpdateFistsPosition ();
-			UpdateBatteryPosition ();
-			updateTarget = false;
-		}
+        if (isInputEnabled)
+        {
+            ReadInput();
+        }
+        if (updateTarget)
+        {
+            UpdateFistsPosition();
+            UpdateBatteryPosition();
+            updateTarget = false;
+        }
 
-		if (isShootButtonPressed) {
-			OnShootButtonPressed ();
-			isShootButtonPressed = false;
-		}
+        if (isShootButtonPressed)
+        {
+            OnShootButtonPressed();
+            isShootButtonPressed = false;
+        }
 
         UpdateAnimation();
-	}
+    }
 
-	void InstantiateBattery ()
-	{
-		battery = Instantiate (batteryPrefab, transform);
-		battery.SetActive (false);
+    void InstantiateBattery()
+    {
+        battery = Instantiate(batteryPrefab, transform);
+        battery.SetActive(false);
         spriteRendererBatteryAvatar = battery.transform.Find("Sprite").GetComponent<SpriteRenderer>();
     }
 
-	void InstantiateCrosshair ()
-	{
-		GameObject ui = GameObject.Find ("UI");
+    void InstantiateCrosshair()
+    {
+        GameObject ui = GameObject.Find("UI");
 
-		crosshair = Instantiate (crosshairPrefab, ui.transform);
-		crosshair.name = gameObject.tag + "Crosshair";
-		crosshair.tag = gameObject.tag;
+        crosshair = Instantiate(crosshairPrefab, ui.transform);
+        crosshair.name = gameObject.tag + "Crosshair";
+        crosshair.tag = gameObject.tag;
 
-		crosshairScript = crosshair.GetComponent<Crosshair> ();
+        crosshairScript = crosshair.GetComponent<Crosshair>();
 
-		playerConfig = GameConfig.Instance.GetPlayerConfig(gameObject.tag);
+        playerConfig = GameConfig.Instance.GetPlayerConfig(gameObject.tag);
 
-		GameObject opponent = GameObject.Find (GetOpponentName ());
-		Vector3 opponentDirection = (opponent.transform.position - transform.position).normalized;
-		crosshair.transform.position = opponentDirection * crosshairScript.gamepadDistance;
-	}
+        if (playerConfig.controlType == GameConfig.ControlType.AI)
+        {
+            crosshair.GetComponent<Image>().enabled = false;
+        }
 
-	void InstantiateFists()
-	{
-		leftFist = Instantiate (fistPrefab, transform);
-		leftFistScript = leftFist.GetComponent<Fist> ();
-		leftFistScript.Initialize(Fist.Type.Left, this.tag, damage, forwardFistDistance ,lateralFistDistance, this);
+        GameObject opponent = GameObject.Find(GetOpponentName());
+        Vector3 opponentDirection = (opponent.transform.position - transform.position).normalized;
+        crosshair.transform.position = opponentDirection * crosshairScript.gamepadDistance;
+    }
 
-		rightFist = Instantiate (fistPrefab, transform);
-		rightFistScript = rightFist.GetComponent<Fist> ();
-		rightFistScript.Initialize(Fist.Type.Right, this.tag, damage, forwardFistDistance ,lateralFistDistance, this);
-	}
+    void InstantiateFists()
+    {
+        leftFist = Instantiate(fistPrefab, transform);
+        leftFistScript = leftFist.GetComponent<Fist>();
+        leftFistScript.Initialize(Fist.Type.Left, this.tag, damage, forwardFistDistance, lateralFistDistance, this);
 
-	void UpdateBatteryPosition()
-	{
-		Vector3 batteryPosition = (target - transform.position).normalized * batteryDistance;
-		batteryPosition.y = 0.0f;
-		battery.transform.localPosition = batteryPosition;
+        rightFist = Instantiate(fistPrefab, transform);
+        rightFistScript = rightFist.GetComponent<Fist>();
+        rightFistScript.Initialize(Fist.Type.Right, this.tag, damage, forwardFistDistance, lateralFistDistance, this);
+    }
+
+    void UpdateBatteryPosition()
+    {
+        Vector3 batteryPosition = (target - transform.position).normalized * batteryDistance;
+        batteryPosition.y = 0.0f;
+        battery.transform.localPosition = batteryPosition;
         spriteRendererBatteryAvatar.sortingOrder = (int)this.transform.position.z * -100;
     }
 
-	void UpdateFistsPosition()
-	{
-		leftFistScript.SetTarget (target);
-		rightFistScript.SetTarget (target);
+    void UpdateFistsPosition()
+    {
+        leftFistScript.SetTarget(target);
+        rightFistScript.SetTarget(target);
 
-		updateTarget = false;
-	}
+        updateTarget = false;
+    }
 
     void UpdateAnimation()
     {
@@ -155,78 +171,96 @@ public class PlayerFistAttack : MonoBehaviour {
     }
 
     void OnShootButtonPressed()
-	{
-		if (playerHealthScript.IsKnockedOut ()) {
-			return;
-		}
-		if (batteryManager.HasBattery ()) {
-			batteryManager.DropBattery ();
-			return;
-		}
+    {
+        if (playerHealthScript.IsKnockedOut())
+        {
+            return;
+        }
+        if (batteryManager.HasBattery())
+        {
+            batteryManager.DropBattery();
+            return;
+        }
 
-		ShootFist ();
-	}
+        ShootFist();
+    }
 
-	void ShootFist()
-	{
-		if (leftFistScript.GetState () == Fist.State.Idle) {
-			leftFistScript.Shoot ();
-		} else if (rightFistScript.GetState () == Fist.State.Idle) {
-			rightFistScript.Shoot ();
-		}
-	}
+    void ShootFist()
+    {
+        if (leftFistScript.GetState() == Fist.State.Idle)
+        {
+            leftFistScript.Shoot();
+        }
+        else if (rightFistScript.GetState() == Fist.State.Idle)
+        {
+            rightFistScript.Shoot();
+        }
+    }
 
-	void ReadInput()
-	{
-		ReadTargetInput ();
-		ReadShootInput ();
-	}
+    void ReadInput()
+    {
+        ReadTargetInput();
+        ReadShootInput();
+    }
 
-	void ReadTargetInput()
-	{
-		updateTarget = true;
-		target = crosshairScript.worldPosition;
-	}
+    void ReadTargetInput()
+    {
+        updateTarget = true;
+        target = crosshairScript.worldPosition;
+    }
 
-	void ReadShootInput()
-	{
-		if (this.playerConfig.unityControllerType == ControllerType.KeyboardMouse) {
-			isShootButtonPressed = Input.GetMouseButtonDown (0);
-		} else if (this.playerConfig.unityControllerType == ControllerType.xBox360Windows) {
-			isShootButtonPressed = Input.GetKeyDown (Controllers.xBox360.Windows.ShootButton (this.playerConfig.playerNumber));
-		} else if (this.playerConfig.unityControllerType == ControllerType.xBox360Mac) {
-			isShootButtonPressed = Input.GetKeyDown (Controllers.xBox360.Mac.ShootButton (this.playerConfig.playerNumber));
-		} else if (this.playerConfig.unityControllerType == ControllerType.xBox360Linux) {
-			isShootButtonPressed = Input.GetKeyDown (Controllers.xBox360.Linux.ShootButton (this.playerConfig.playerNumber));
-		}
-	}
+    void ReadShootInput()
+    {
+        if (this.playerConfig.unityControllerType == ControllerType.KeyboardMouse)
+        {
+            isShootButtonPressed = Input.GetMouseButtonDown(0);
+        }
+        else if (this.playerConfig.unityControllerType == ControllerType.xBox360Windows)
+        {
+            isShootButtonPressed = Input.GetKeyDown(Controllers.xBox360.Windows.ShootButton1(this.playerConfig.playerNumber)) ||
+                                   Input.GetKeyDown(Controllers.xBox360.Windows.ShootButton2(this.playerConfig.playerNumber));
+        }
+        else if (this.playerConfig.unityControllerType == ControllerType.xBox360Mac)
+        {
+            isShootButtonPressed = Input.GetKeyDown(Controllers.xBox360.Mac.ShootButton1(this.playerConfig.playerNumber)) ||
+                                   Input.GetKeyDown(Controllers.xBox360.Mac.ShootButton2(this.playerConfig.playerNumber));
+        }
+        else if (this.playerConfig.unityControllerType == ControllerType.xBox360Linux)
+        {
+            isShootButtonPressed = Input.GetKeyDown(Controllers.xBox360.Linux.ShootButton1(this.playerConfig.playerNumber)) ||
+                                   Input.GetKeyDown(Controllers.xBox360.Linux.ShootButton2(this.playerConfig.playerNumber));
+        }
+    }
 
-	string GetOpponentName()
-	{
-		if (this.tag == "Red") {
-			return "BluePlayer";
-		} else {
-			return "RedPlayer";
-		}
-	}
+    string GetOpponentName()
+    {
+        if (this.tag == "Red")
+        {
+            return "BluePlayer";
+        }
+        else
+        {
+            return "RedPlayer";
+        }
+    }
 
-	private GameManager gameManager;
-	private PlayerBatteryManager batteryManager;
+    private GameManager gameManager;
+    private PlayerBatteryManager batteryManager;
 
-	private GameConfig.PlayerConfig playerConfig;
-	private GameObject battery;
-	private GameObject leftFist;
-	private Fist leftFistScript;
-	private GameObject rightFist;
-	private Fist rightFistScript;
-	private GameObject crosshair;
-	private Crosshair crosshairScript;
-	private PlayerHealth playerHealthScript;
+    private GameConfig.PlayerConfig playerConfig;
+    private GameObject battery;
+    private GameObject leftFist;
+    private Fist leftFistScript;
+    private GameObject rightFist;
+    private Fist rightFistScript;
+    private GameObject crosshair;
+    private Crosshair crosshairScript;
+    private PlayerHealth playerHealthScript;
     private SpriteRenderer spriteRenderer;
     private SpriteRenderer spriteRendererBatteryAvatar;
     private Animator animator;
     private bool isInputEnabled = true;
-	private Vector3 target;
-	private bool updateTarget = false;
-	private bool isShootButtonPressed = false;
+    private Vector3 target;
+    private bool updateTarget = false;
+    private bool isShootButtonPressed = false;
 }
