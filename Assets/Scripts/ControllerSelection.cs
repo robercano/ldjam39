@@ -26,7 +26,8 @@ public class ControllerSelection : MonoBehaviour {
 		
 	public void OnPlayClicked()
 	{
-		SceneManager.LoadScene("Level");
+        GameConfig.Instance.UpdateControllerIndex();
+        SceneManager.LoadScene("Level");
 	}
 
 	public void SetBluePlayerKeyboard()

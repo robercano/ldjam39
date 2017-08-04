@@ -4,39 +4,41 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(AudioSource))]
-public class UIGenericButtonController : EventTrigger {
+public class UIGenericButtonController : EventTrigger
+{
 
-	private AudioSource audioSource;
-	private EventTrigger eventTrigger;
-	public AudioClip UIClickSound;
-	public AudioClip UIOverSound;
+    private AudioSource audioSource;
+    private EventTrigger eventTrigger;
+    public AudioClip UIClickSound;
+    public AudioClip UIOverSound;
 
-	void Start () {
-		audioSource = GetComponent<AudioSource> ();
-	}
-	
-	public void PlayClickSound() {
-		audioSource.PlayOneShot (UIClickSound);
-	}
+    void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
 
-	public void PlayOverSound() {
-		audioSource.PlayOneShot (UIOverSound);
-	}
+    public void PlayClickSound()
+    {
+        audioSource.PlayOneShot(UIClickSound);
+    }
 
-//	public override void OnPointerClick(PointerEventData data) {
-//		PlayClickSound ();
-//	}
-		
-	public override void OnPointerEnter(PointerEventData data){
-		PlayOverSound ();
-	}
+    public void PlayOverSound()
+    {
+        audioSource.PlayOneShot(UIOverSound);
+    }
 
-	public override void OnSelect(BaseEventData data){
-		PlayOverSound ();
-	}
-	public override void OnSubmit(BaseEventData data) {
-		Debug.Log ("OnSubmit");
-		PlayClickSound ();
-	}
+    public override void OnPointerEnter(PointerEventData data)
+    {
+        PlayOverSound();
+    }
+
+    public override void OnSelect(BaseEventData data)
+    {
+        PlayOverSound();
+    }
+    public override void OnSubmit(BaseEventData data)
+    {
+        PlayClickSound();
+    }
 
 }

@@ -89,15 +89,15 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (this.playerConfig.unityControllerType == ControllerType.xBox360Windows)
         {
-            return (Input.GetAxis(Controllers.xBox360.Windows.MoveAxisX(this.playerConfig.playerNumber)) > this.axisMargin);
+            return (Input.GetAxis(Controllers.xBox360.Windows.MoveAxisX(this.playerConfig.controllerIndex)) > this.axisMargin);
         }
         else if (this.playerConfig.unityControllerType == ControllerType.xBox360Mac)
         {
-            return (Input.GetAxis(Controllers.xBox360.Mac.MoveAxisX(this.playerConfig.playerNumber)) > this.axisMargin);
+            return (Input.GetAxis(Controllers.xBox360.Mac.MoveAxisX(this.playerConfig.controllerIndex)) > this.axisMargin);
         }
         else if (this.playerConfig.unityControllerType == ControllerType.xBox360Linux)
         {
-            return (Input.GetAxis(Controllers.xBox360.Linux.MoveAxisX(this.playerConfig.playerNumber)) > this.axisMargin);
+            return (Input.GetAxis(Controllers.xBox360.Linux.MoveAxisX(this.playerConfig.controllerIndex)) > this.axisMargin);
         }
 
         return false;
@@ -111,15 +111,15 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (this.playerConfig.unityControllerType == ControllerType.xBox360Windows)
         {
-            return (Input.GetAxis(Controllers.xBox360.Windows.MoveAxisX(this.playerConfig.playerNumber)) < -this.axisMargin);
+            return (Input.GetAxis(Controllers.xBox360.Windows.MoveAxisX(this.playerConfig.controllerIndex)) < -this.axisMargin);
         }
         else if (this.playerConfig.unityControllerType == ControllerType.xBox360Mac)
         {
-            return (Input.GetAxis(Controllers.xBox360.Mac.MoveAxisX(this.playerConfig.playerNumber)) < -this.axisMargin);
+            return (Input.GetAxis(Controllers.xBox360.Mac.MoveAxisX(this.playerConfig.controllerIndex)) < -this.axisMargin);
         }
         else if (this.playerConfig.unityControllerType == ControllerType.xBox360Linux)
         {
-            return (Input.GetAxis(Controllers.xBox360.Linux.MoveAxisX(this.playerConfig.playerNumber)) < -this.axisMargin);
+            return (Input.GetAxis(Controllers.xBox360.Linux.MoveAxisX(this.playerConfig.controllerIndex)) < -this.axisMargin);
         }
 
         return false;
@@ -133,15 +133,15 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (this.playerConfig.unityControllerType == ControllerType.xBox360Windows)
         {
-            return (Input.GetAxis(Controllers.xBox360.Windows.MoveAxisY(this.playerConfig.playerNumber)) < -this.axisMargin);
+            return (Input.GetAxis(Controllers.xBox360.Windows.MoveAxisY(this.playerConfig.controllerIndex)) < -this.axisMargin);
         }
         else if (this.playerConfig.unityControllerType == ControllerType.xBox360Mac)
         {
-            return (Input.GetAxis(Controllers.xBox360.Mac.MoveAxisY(this.playerConfig.playerNumber)) < -this.axisMargin);
+            return (Input.GetAxis(Controllers.xBox360.Mac.MoveAxisY(this.playerConfig.controllerIndex)) < -this.axisMargin);
         }
         else if (this.playerConfig.unityControllerType == ControllerType.xBox360Linux)
         {
-            return (Input.GetAxis(Controllers.xBox360.Linux.MoveAxisY(this.playerConfig.playerNumber)) < -this.axisMargin);
+            return (Input.GetAxis(Controllers.xBox360.Linux.MoveAxisY(this.playerConfig.controllerIndex)) < -this.axisMargin);
         }
 
         return false;
@@ -155,15 +155,15 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (this.playerConfig.unityControllerType == ControllerType.xBox360Windows)
         {
-            return (Input.GetAxis(Controllers.xBox360.Windows.MoveAxisY(this.playerConfig.playerNumber)) > this.axisMargin);
+            return (Input.GetAxis(Controllers.xBox360.Windows.MoveAxisY(this.playerConfig.controllerIndex)) > this.axisMargin);
         }
         else if (this.playerConfig.unityControllerType == ControllerType.xBox360Mac)
         {
-            return (Input.GetAxis(Controllers.xBox360.Mac.MoveAxisY(this.playerConfig.playerNumber)) > this.axisMargin);
+            return (Input.GetAxis(Controllers.xBox360.Mac.MoveAxisY(this.playerConfig.controllerIndex)) > this.axisMargin);
         }
         else if (this.playerConfig.unityControllerType == ControllerType.xBox360Linux)
         {
-            return (Input.GetAxis(Controllers.xBox360.Linux.MoveAxisY(this.playerConfig.playerNumber)) > this.axisMargin);
+            return (Input.GetAxis(Controllers.xBox360.Linux.MoveAxisY(this.playerConfig.controllerIndex)) > this.axisMargin);
         }
 
         return false;
@@ -193,7 +193,7 @@ public class PlayerMovement : MonoBehaviour
         {
             frontDirection = new Vector3(1.0f, 0.0f, 0.0f);
         }
-        if (playerFistAttack.GetDirection() != null)
+        if (playerFistAttack.GetDirection() != Vector3.zero)
         {
             frontDirection = playerFistAttack.GetDirection() - gameObject.transform.position;
             frontDirection = frontDirection.normalized;
@@ -209,5 +209,10 @@ public class PlayerMovement : MonoBehaviour
     public Vector3 GetPlayerSpeed()
     {
         return this.refRigidbody.velocity;
+    }
+
+    public Vector3 GetLastMovementDirection()
+    {
+        return this.lastMovementDirection;
     }
 }

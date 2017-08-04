@@ -260,6 +260,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 1
   knockedOutTime: 2
+  invulnerabilityTime: 4
+  invulnerabilityAlpha: 0.6
   knockedOutSound: {fileID: 8300000, guid: 97cadb401dda8423d9eb5ac796af3b6d, type: 3}
   recoverSound: {fileID: 8300000, guid: 225fc54d5a4fc4cb4ad0457009b97a7a, type: 3}
 --- !u!114 &114572256336701270
@@ -299,9 +301,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 10
-  forwardFistDistance: 0.5
-  lateralFistDistance: 0.5
-  batteryDistance: 1
+  forwardFistDistance: 0.3
+  lateralFistDistance: 0.4
+  batteryDistance: 0.6
   fistPrefab: {fileID: 1424440500537806, guid: 11d8679b856004af18f2185d30717736, type: 2}
   batteryPrefab: {fileID: 1601435324770064, guid: 97ce91a1cb2c94ff89120b80345bbf55,
     type: 2}

@@ -7,12 +7,32 @@ using UnityEngine.Assertions;
 public class PlayerFistAttack : MonoBehaviour
 {
     public int damage = 1;
-    public float forwardFistDistance = 1.0f;
-    public float lateralFistDistance = 1.0f;
-    public float batteryDistance = 1.0f;
+    public float forwardFistDistance = 0.3f;
+    public float lateralFistDistance = 0.4f;
+    public float batteryDistance = 0.6f;
     public GameObject fistPrefab;
     public GameObject batteryPrefab;
     public GameObject crosshairPrefab;
+
+    public void SetFistAlpha(float alpha)
+    {
+        if (leftFistScript.GetState() == Fist.State.Idle)
+        {
+            leftFistRenderer.color = new Color(1.0f, 1.0f, 1.0f, alpha);
+        }
+        else
+        {
+            leftFistRenderer.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+        }
+        if (leftFistScript.GetState() == Fist.State.Idle)
+        {
+            rightFistRenderer.color = new Color(1.0f, 1.0f, 1.0f, alpha);
+        }
+        else
+        {
+            rightFistRenderer.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+        }
+    }
 
     public void SetInputEnabled(bool enable)
     {
@@ -130,10 +150,12 @@ public class PlayerFistAttack : MonoBehaviour
     void InstantiateFists()
     {
         leftFist = Instantiate(fistPrefab, transform);
+        leftFistRenderer = leftFist.GetComponentInChildren<SpriteRenderer>();
         leftFistScript = leftFist.GetComponent<Fist>();
         leftFistScript.Initialize(Fist.Type.Left, this.tag, damage, forwardFistDistance, lateralFistDistance, this);
 
         rightFist = Instantiate(fistPrefab, transform);
+        rightFistRenderer = rightFist.GetComponentInChildren<SpriteRenderer>();
         rightFistScript = rightFist.GetComponent<Fist>();
         rightFistScript.Initialize(Fist.Type.Right, this.tag, damage, forwardFistDistance, lateralFistDistance, this);
     }
@@ -159,14 +181,14 @@ public class PlayerFistAttack : MonoBehaviour
         Vector3 lookDirection = (transform.position - target).normalized;
         bool isBackAnimator = animator.GetBool("IsBack");
 
-        if ((lookDirection.x > 0.1) && !spriteRenderer.flipX)
+        if ((lookDirection.x > 0.05) && !spriteRenderer.flipX)
             spriteRenderer.flipX = true;
-        else if ((lookDirection.x < 0.1) && spriteRenderer.flipX)
+        else if ((lookDirection.x < 0.05) && spriteRenderer.flipX)
             spriteRenderer.flipX = false;
 
-        if ((lookDirection.z < 0.1) && !isBackAnimator)
+        if ((lookDirection.z < -0.2) && !isBackAnimator)
             animator.SetBool("IsBack", true);
-        else if ((lookDirection.z > 0.1) && isBackAnimator)
+        else if ((lookDirection.z > -0.1) && isBackAnimator)
             animator.SetBool("IsBack", false);
     }
 
@@ -217,18 +239,18 @@ public class PlayerFistAttack : MonoBehaviour
         }
         else if (this.playerConfig.unityControllerType == ControllerType.xBox360Windows)
         {
-            isShootButtonPressed = Input.GetKeyDown(Controllers.xBox360.Windows.ShootButton1(this.playerConfig.playerNumber)) ||
-                                   Input.GetKeyDown(Controllers.xBox360.Windows.ShootButton2(this.playerConfig.playerNumber));
+            isShootButtonPressed = Input.GetKeyDown(Controllers.xBox360.Windows.ShootButton1(this.playerConfig.controllerIndex)) ||
+                                   Input.GetKeyDown(Controllers.xBox360.Windows.ShootButton2(this.playerConfig.controllerIndex));
         }
         else if (this.playerConfig.unityControllerType == ControllerType.xBox360Mac)
         {
-            isShootButtonPressed = Input.GetKeyDown(Controllers.xBox360.Mac.ShootButton1(this.playerConfig.playerNumber)) ||
-                                   Input.GetKeyDown(Controllers.xBox360.Mac.ShootButton2(this.playerConfig.playerNumber));
+            isShootButtonPressed = Input.GetKeyDown(Controllers.xBox360.Mac.ShootButton1(this.playerConfig.controllerIndex)) ||
+                                   Input.GetKeyDown(Controllers.xBox360.Mac.ShootButton2(this.playerConfig.controllerIndex));
         }
         else if (this.playerConfig.unityControllerType == ControllerType.xBox360Linux)
         {
-            isShootButtonPressed = Input.GetKeyDown(Controllers.xBox360.Linux.ShootButton1(this.playerConfig.playerNumber)) ||
-                                   Input.GetKeyDown(Controllers.xBox360.Linux.ShootButton2(this.playerConfig.playerNumber));
+            isShootButtonPressed = Input.GetKeyDown(Controllers.xBox360.Linux.ShootButton1(this.playerConfig.controllerIndex)) ||
+                                   Input.GetKeyDown(Controllers.xBox360.Linux.ShootButton2(this.playerConfig.controllerIndex));
         }
     }
 
@@ -250,8 +272,10 @@ public class PlayerFistAttack : MonoBehaviour
     private GameConfig.PlayerConfig playerConfig;
     private GameObject battery;
     private GameObject leftFist;
+    private SpriteRenderer leftFistRenderer;
     private Fist leftFistScript;
     private GameObject rightFist;
+    private SpriteRenderer rightFistRenderer;
     private Fist rightFistScript;
     private GameObject crosshair;
     private Crosshair crosshairScript;

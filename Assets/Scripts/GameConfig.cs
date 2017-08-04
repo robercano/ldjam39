@@ -8,10 +8,10 @@ public class GameConfig : Singleton<GameConfig>
 
     public struct PlayerConfig
     {
-        public string playerNumber;
         public Color crosshairColor;
         public ControllerType unityControllerType;
         public ControlType controlType;
+        public string controllerIndex;
     }
 
     public enum Team
@@ -39,7 +39,7 @@ public class GameConfig : Singleton<GameConfig>
                 newConfig.unityControllerType = ControllerType.KeyboardMouse;
                 break;
             case ControlType.Controller:
-                if (Application.platform == RuntimePlatform.OSXPlayer || Application.platform == RuntimePlatform.OSXEditor || Application.platform == RuntimePlatform.OSXWebPlayer || Application.platform == RuntimePlatform.OSXDashboardPlayer)
+                if (Application.platform == RuntimePlatform.OSXPlayer || Application.platform == RuntimePlatform.OSXEditor || Application.platform == RuntimePlatform.OSXDashboardPlayer)
                 {
                     newConfig.unityControllerType = ControllerType.xBox360Mac;
                 }
@@ -56,6 +56,21 @@ public class GameConfig : Singleton<GameConfig>
         playerConfig[team] = newConfig;
     }
 
+    public void UpdateControllerIndex()
+    {
+        PlayerConfig bluePlayerConfig = playerConfig[Team.Blue];
+        PlayerConfig redPlayerConfig = playerConfig[Team.Red];
+
+        bluePlayerConfig.controllerIndex = "1";
+        redPlayerConfig.controllerIndex = "2";
+
+        if ((playerConfig[Team.Red].controlType == ControlType.Controller) && (playerConfig[Team.Blue].controlType != ControlType.Controller))
+            redPlayerConfig.controllerIndex = "1";
+
+        playerConfig[Team.Blue] = bluePlayerConfig;
+        playerConfig[Team.Red] = redPlayerConfig;
+    }
+
     GameConfig()
     {
         playerConfig = new Dictionary<Team, PlayerConfig>();
@@ -63,9 +78,9 @@ public class GameConfig : Singleton<GameConfig>
         PlayerConfig bluePlayerConfig;
 
         bluePlayerConfig = new PlayerConfig();
-        bluePlayerConfig.playerNumber = "1";
         bluePlayerConfig.crosshairColor = Color.blue;
         bluePlayerConfig.unityControllerType = ControllerType.KeyboardMouse;
+        bluePlayerConfig.controllerIndex = "1";
         bluePlayerConfig.controlType = ControlType.Controller;
 
         playerConfig[Team.Blue] = bluePlayerConfig;
@@ -74,9 +89,9 @@ public class GameConfig : Singleton<GameConfig>
         PlayerConfig redPlayerConfig;
 
         redPlayerConfig = new PlayerConfig();
-        redPlayerConfig.playerNumber = "2";
         redPlayerConfig.crosshairColor = Color.red;
         redPlayerConfig.unityControllerType = ControllerType.None;
+        redPlayerConfig.controllerIndex = "2";
         redPlayerConfig.controlType = ControlType.AI;
 
         playerConfig[Team.Red] = redPlayerConfig;

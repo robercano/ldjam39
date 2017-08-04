@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
-    Camera camera;
+    Camera cameraComponent;
     int currentWidth = 0;
     int currentHeight = 0;
     private Coroutine cameraShakeCoroutine = null;
@@ -15,7 +15,7 @@ public class CameraManager : MonoBehaviour
     }
     void Start()
     {
-        camera = GetComponent<Camera>();
+        cameraComponent = GetComponent<Camera>();
         currentWidth = Screen.width;
         currentHeight = Screen.height;
         UpdateCameraSize();
@@ -36,7 +36,7 @@ public class CameraManager : MonoBehaviour
     }
     void UpdateCameraSize()
     {
-        camera.orthographicSize = 32.0f * currentHeight / currentWidth / 2.0f;
+        cameraComponent.orthographicSize = 32.0f * currentHeight / currentWidth / 2.0f;
     }
 
     //Add a camera shake effect
