@@ -81,7 +81,7 @@ public class GameConfig : Singleton<GameConfig>
         bluePlayerConfig.crosshairColor = Color.blue;
         bluePlayerConfig.unityControllerType = ControllerType.KeyboardMouse;
         bluePlayerConfig.controllerIndex = "1";
-        bluePlayerConfig.controlType = ControlType.Controller;
+        bluePlayerConfig.controlType = ControlType.Keyboard;
 
         playerConfig[Team.Blue] = bluePlayerConfig;
 
